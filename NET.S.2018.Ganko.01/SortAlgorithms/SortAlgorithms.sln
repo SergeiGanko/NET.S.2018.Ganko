@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SortAlgorithms", "SortAlgorithms\SortAlgorithms.csproj", "{06B29543-B873-4DF4-89A3-4006F67C3051}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SortAlgorithms.Tests", "SortAlgorithms.Tests\SortAlgorithms.Tests.csproj", "{397144AA-5F6E-403E-BE3B-5F71B593836E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{06B29543-B873-4DF4-89A3-4006F67C3051}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06B29543-B873-4DF4-89A3-4006F67C3051}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06B29543-B873-4DF4-89A3-4006F67C3051}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06B29543-B873-4DF4-89A3-4006F67C3051}.Release|Any CPU.Build.0 = Release|Any CPU
+		{397144AA-5F6E-403E-BE3B-5F71B593836E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{397144AA-5F6E-403E-BE3B-5F71B593836E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{397144AA-5F6E-403E-BE3B-5F71B593836E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{397144AA-5F6E-403E-BE3B-5F71B593836E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F484466A-0D00-4E70-A989-6BF2B2B6EDA1}
+	EndGlobalSection
+EndGlobal

@@ -21,6 +21,7 @@ namespace ConsoleApp1
         /// </summary>
         private static void Main()
         {
+
             Console.WriteLine($"******* Mergesort Algorithm Testing *******");
             MergeSortDemostrate();
 
@@ -35,7 +36,7 @@ namespace ConsoleApp1
         private static void MergeSortDemostrate()
         {
             int[] arrayOfInts =
-                        {
+            {
                 5, 2, 4, 1, 3, 45, 0, 31, 89, 123, 42, 73, 99
             };
 
