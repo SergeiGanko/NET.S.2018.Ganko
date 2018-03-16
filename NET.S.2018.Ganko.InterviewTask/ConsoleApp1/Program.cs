@@ -1,15 +1,11 @@
-﻿// <copyright file="Program.cs" company="Sergei Ganko">
-//     Copyright (c) Sergei Ganko. All rights reserved.
-// </copyright>
-// <author>Sergei Ganko</author>
+﻿using System;
+using System.Collections.Generic;
+using MergeSortAlgorithm;
+using Model;
+using MyQueue;
+
 namespace ConsoleApp1
 {
-    using System;
-    using System.Collections.Generic;
-    using MergeSortAlgorithm;
-    using Model;
-    using MyQueue;
-
     /// <summary>
     ///  Class Program.
     ///  The main class of the program

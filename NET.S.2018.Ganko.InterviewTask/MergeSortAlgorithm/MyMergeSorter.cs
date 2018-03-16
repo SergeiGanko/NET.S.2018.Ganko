@@ -1,11 +1,7 @@
-﻿// <copyright file="MyMergeSorter.cs" company="Sergei Ganko">
-//     Copyright (c) Sergei Ganko. All rights reserved.
-// </copyright>
-// <author>Sergei Ganko</author>
+﻿using System;
+
 namespace MergeSortAlgorithm
 {
-    using System;
-
     /// <summary>
     /// The MyMergeSorter class.
     /// Contains all methods for performing merge sorting.
@@ -19,6 +15,11 @@ namespace MergeSortAlgorithm
         /// <param name="input">Input array</param>
         public static void MergeSort<T>(T[] input) where T : IComparable<T>
         {
+            if (input == null)
+            {
+                throw new ArgumentNullException(nameof(input));
+            }
+
             MergeSort(input, 0, input.Length);
         }
 
@@ -29,7 +30,7 @@ namespace MergeSortAlgorithm
         /// <param name="input">Input array</param>
         /// <param name="left">First index of input array</param>
         /// <param name="right">Last index of input array</param>
-        public static void MergeSort<T>(T[] input, int left, int right) 
+        private static void MergeSort<T>(T[] input, int left, int right) 
             where T : IComparable<T>
         {
             int n = right - left; 

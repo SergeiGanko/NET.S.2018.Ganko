@@ -1,13 +1,9 @@
-﻿// <copyright file="MyQueueOfStrings.cs" company="Sergei Ganko">
-//     Copyright (c) Sergei Ganko. All rights reserved.
-// </copyright>
-// <author>Sergei Ganko</author>
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+
 namespace MyQueue
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-
     /// <summary>
     /// Class MyQueueOfStrings.
     /// A circular-array implementation of a queue of strings.
@@ -61,7 +57,7 @@ namespace MyQueue
         {
             if (capasity < 0)
             {
-                throw new ArgumentOutOfRangeException($"The queue dimension must be > 0");
+                throw new ArgumentOutOfRangeException($"The queue {nameof(capasity)} must be > 0");
             }
 
             this.array = new string[capasity];

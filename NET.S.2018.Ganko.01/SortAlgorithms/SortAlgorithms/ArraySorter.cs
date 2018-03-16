@@ -17,7 +17,7 @@ namespace SortAlgorithms
         {
             if (input == null)
             {
-                throw new ArgumentNullException(nameof(input));
+                throw new ArgumentNullException($"{nameof(input)} is null");
             }
 
             MergeSort(input, 0, input.Length);
@@ -35,7 +35,7 @@ namespace SortAlgorithms
         {
             if (input == null)
             {
-                throw new ArgumentNullException(nameof(input));
+                throw new ArgumentNullException($"{nameof(input)} is null");
             }
 
             QuickSort(input, 0, input.Length - 1);

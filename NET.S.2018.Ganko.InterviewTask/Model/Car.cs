@@ -1,12 +1,7 @@
-﻿// <copyright file="Car.cs" company="Sergei Ganko">
-//     Copyright (c) Sergei Ganko. All rights reserved.
-// </copyright>
-// <author>Sergei Ganko</author>
+﻿using System;
 
 namespace Model
 {
-    using System;
-
     /// <summary>
     /// Class Car.
     /// Incapsulates information about a car
