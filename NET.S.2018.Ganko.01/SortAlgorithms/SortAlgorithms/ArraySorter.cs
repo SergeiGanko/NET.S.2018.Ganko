@@ -3,10 +3,12 @@
 namespace SortAlgorithms
 {
     /// <summary>
-    /// MergeSorter class
+    /// ArraySorter class
     /// </summary>
-    public static class MergeSorter
+    public static class ArraySorter
     {
+        #region MergeSort Public Members
+
         /// <summary>
         /// Receives an input array and calls overloaded version of method MergeSort with 3 parameters
         /// </summary>
@@ -15,16 +17,33 @@ namespace SortAlgorithms
         {
             if (input == null)
             {
-                throw new ArgumentNullException($"Input is null");
-            }
-
-            if (input.Length == 0)
-            {
-                throw new ArgumentException("Array is empty");
+                throw new ArgumentNullException(nameof(input));
             }
 
             MergeSort(input, 0, input.Length);
         }
+
+        #endregion
+
+        #region QuickSort Public Members
+
+        /// <summary>
+        /// Receives an input array and calls overloaded version of method QuickSort with 3 parameters
+        /// </summary>
+        /// <param name="input">Array of ints</param>
+        public static void QuickSort(int[] input)
+        {
+            if (input == null)
+            {
+                throw new ArgumentNullException(nameof(input));
+            }
+
+            QuickSort(input, 0, input.Length - 1);
+        }
+
+        #endregion
+
+        #region MergeSort Private Members
 
         /// <summary>
         /// Sorts left half of array, sorts right half of array and calls method Merge
@@ -93,5 +112,61 @@ namespace SortAlgorithms
                 input[left + k] = temp[k];
             }
         }
+
+        #endregion
+
+        #region QuickSort Private Members
+
+        /// <summary>
+        /// Method sorts array of ints
+        /// </summary>
+        /// <param name="input">Array of ints</param>
+        /// <param name="left">The first index of array</param>
+        /// <param name="right">The last index of array</param>
+        private static void QuickSort(int[] input, int left, int right)
+        {
+            if (input.Length < 2)
+            {
+                return;
+            }
+
+            int i = left;
+            int j = right;
+            int pivot = input[(left + right) / 2];
+
+            while (i <= j)
+            {
+                while (input[i].CompareTo(pivot) < 0)
+                {
+                    i++;
+                }
+
+                while (input[j].CompareTo(pivot) > 0)
+                {
+                    j--;
+                }
+
+                if (i <= j)
+                {
+                    int temp = input[i];
+                    input[i] = input[j];
+                    input[j] = temp;
+                    i++;
+                    j--;
+                }
+            }
+
+            if (left < j)
+            {
+                QuickSort(input, left, j);
+            }
+
+            if (i < right)
+            {
+                QuickSort(input, i, right);
+            }
+        }
+
+        #endregion
     }
 }

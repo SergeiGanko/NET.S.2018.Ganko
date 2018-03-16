@@ -48,9 +48,9 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MergeSorterTests.cs" />
+    <Compile Include="ArraySorterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QuickSorterTests.cs" />
+    <Compile Include="TestArraysInitializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
