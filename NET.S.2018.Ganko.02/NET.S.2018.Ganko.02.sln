@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicCoding", "BasicCoding\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicCoding.Tests", "BasicCoding.Tests\BasicCoding.Tests.csproj", "{A98DEC90-34AA-4B9B-8711-C61EAFC5C0BE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicCoding.NUnitTests", "BasicCoding.NUnitTests\BasicCoding.NUnitTests.csproj", "{23F86ED4-AFE7-4148-A749-9BF7B2513293}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{A98DEC90-34AA-4B9B-8711-C61EAFC5C0BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A98DEC90-34AA-4B9B-8711-C61EAFC5C0BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A98DEC90-34AA-4B9B-8711-C61EAFC5C0BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23F86ED4-AFE7-4148-A749-9BF7B2513293}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23F86ED4-AFE7-4148-A749-9BF7B2513293}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23F86ED4-AFE7-4148-A749-9BF7B2513293}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23F86ED4-AFE7-4148-A749-9BF7B2513293}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

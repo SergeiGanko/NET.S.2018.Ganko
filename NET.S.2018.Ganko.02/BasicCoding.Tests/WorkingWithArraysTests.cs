@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
 
 namespace BasicCoding.Tests
 {
@@ -9,23 +10,82 @@ namespace BasicCoding.Tests
     [TestClass]
     public class WorkingWithArraysTests
     {
+        #region Private Fields
+
+        /// <summary>
+        /// The get random
+        /// </summary>
+        private static readonly Random getRandom = new Random();
+
+        /// <summary>
+        /// The input array
+        /// </summary>
+        private static int[] inputArray;
+
+        /// <summary>
+        /// The expect result array
+        /// </summary>
+        private static int[] expectResultArray;
+
+        #endregion
+
+        #region Filter Digit Tests
+
         /// <summary>
         /// Method calls FilterDigit method and passes to it array of ints and a specific digit
-        /// Expected result - array of ints with elements which contain specific digit
+        /// Expected result - array of ints with elements which contain the specific digit
         /// </summary>
         [TestMethod]
         public void FilterDigit_PassesArrayOfIntsAndDigit_ExpectsArrayWithElementWhichContainDigit()
         {
             // Arrange
-            int[] input = { 51, 34, 173, 2, 69, 16, 3, 4 };
             int digit = 3;
-            int[] expected = { 34, 173, 3 };
+            int n = 1000000;
+            InitializeActualResultArrayAndExpectResultArray(n, digit, int.MinValue, int.MaxValue);
 
             // Act
-            var actual = WorkingWithArrays.FilterDigit(input, digit);
+            var actualResultArray = WorkingWithArrays.FilterDigit(inputArray, digit);
 
             // Assert
-            CollectionAssert.AreEqual(expected, actual);
+            CollectionAssert.AreEqual(expectResultArray, actualResultArray);
+        }
+
+        /// <summary>
+        /// Method calls FilterDigit method and passes to it array of positive ints and a specific digit
+        /// Expected result - array of ints with elements which contain the specific digit
+        /// </summary>
+        [TestMethod]
+        public void FilterDigit_PassesArrayOfPositiveIntsAndDigit_ExpectsArrayWithElementWhichContainDigit()
+        {
+            // Arrange
+            int digit = 3;
+            int n = 1000000;
+            InitializeActualResultArrayAndExpectResultArray(n, digit, 0, int.MaxValue);
+
+            // Act
+            var actualResultArray = WorkingWithArrays.FilterDigit(inputArray, digit);
+
+            // Assert
+            CollectionAssert.AreEqual(expectResultArray, actualResultArray);
+        }
+
+        /// <summary>
+        /// Method calls FilterDigit method and passes to it array of negative ints and a specific digit
+        /// Expected result - array of ints with elements which contain the specific digit
+        /// </summary>
+        [TestMethod]
+        public void FilterDigit_PassesArrayOfNegativeIntsAndDigit_ExpectsArrayWithElementWhichContainDigit()
+        {
+            // Arrange
+            int digit = 3;
+            int n = 1000000;
+            InitializeActualResultArrayAndExpectResultArray(n, digit, int.MinValue, 0);
+
+            // Act
+            var actualResultArray = WorkingWithArrays.FilterDigit(inputArray, digit);
+
+            // Assert
+            CollectionAssert.AreEqual(expectResultArray, actualResultArray);
         }
 
         /// <summary>
@@ -34,7 +94,7 @@ namespace BasicCoding.Tests
         /// </summary>
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void FilterDigit_PassesNullAsArgument_ExpectsArgumentNullException() 
+        public void FilterDigit_PassesNullAsArgument_ExpectsArgumentNullException()
             => WorkingWithArrays.FilterDigit(null, 3);
 
         /// <summary>
@@ -51,8 +111,42 @@ namespace BasicCoding.Tests
         /// Expected result - throwing ArgumentException
         /// </summary>
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void FilterDigit_PassesArrayAndInvalidDigit_ExpectsArgumentException()
-            => WorkingWithArrays.FilterDigit(new []{ 51, 34, 173, 2, 69, 16, 3, 4 }, 12);
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void FilterDigit_PassesArrayAndInvalidDigit_ExpectsArgumentOutOfRangeException()
+            => WorkingWithArrays.FilterDigit(new[] { 51, 34, 173, 2, 69, 16, 3, 4 }, 12);
+
+        #endregion
+
+        #region Private Methods
+
+        private static void InitializeActualResultArrayAndExpectResultArray(int n, int digit, int min, int max)
+        {
+            List<int> randomList = new List<int>();
+            List<int> filteredList = new List<int>();
+
+            for (int i = 0; i < n; i++)
+            {
+                randomList.Add(GetRandom(min, max));
+            }
+
+            inputArray = randomList.ToArray();
+
+            foreach (var item in randomList)
+            {
+                if (item.ToString().Contains(digit.ToString()))
+                {
+                    filteredList.Add(item);
+                }
+            }
+
+            expectResultArray = filteredList.ToArray();
+        }
+
+        private static int GetRandom(int min, int max)
+        {
+            return getRandom.Next(min, max);
+        }
+
+        #endregion
     }
 }

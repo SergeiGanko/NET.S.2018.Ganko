@@ -18,12 +18,17 @@ namespace BasicCoding
         {
             if (input == null)
             {
-                throw new ArgumentNullException($"Input is null");
+                throw new ArgumentNullException($"{nameof(input)} is null or empty");
             }
 
-            if (input.Length == 0 || digit < 0 || digit > 9)
+            if (input.Length == 0)
             {
-                throw new ArgumentException("Invalid argument(s)");
+                throw new ArgumentException($"{nameof(input)} is empty");
+            }
+
+            if (digit < 0 || digit > 9)
+            {
+                throw new ArgumentOutOfRangeException($"Invalid argument - {nameof(digit)}");
             }
 
             var temp = new List<int>();
@@ -52,14 +57,9 @@ namespace BasicCoding
                 return true;
             }
 
-            if (number < 0)
+            while (number > 0 || number < 0)
             {
-                number = Math.Abs(number);
-            }
-
-            while (number > 0)
-            {
-                if (number % 10 == digit)
+                if (number % 10 == digit || number % 10 == -digit)
                 {
                     return true;
                 }
