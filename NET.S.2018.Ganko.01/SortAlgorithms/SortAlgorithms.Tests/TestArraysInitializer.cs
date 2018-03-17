@@ -8,6 +8,8 @@ namespace SortAlgorithms.Tests
     /// </summary>
     public static class TestArraysInitializer
     {
+        #region Private Fields
+
         /// <summary>
         /// The get random
         /// </summary>
@@ -22,6 +24,10 @@ namespace SortAlgorithms.Tests
         /// The expect result array
         /// </summary>
         private static int[] expectResultArray;
+
+        #endregion
+
+        #region Public Properties and Methods
 
         /// <summary>
         /// Gets the actual result array.
@@ -59,15 +65,21 @@ namespace SortAlgorithms.Tests
             expectResultArray = randomList.ToArray();
         }
 
+        #endregion
+
+        #region Private Methods
+
         /// <summary>
         /// Gets the random.
         /// </summary>
         /// <param name="min">The minimum.</param>
         /// <param name="max">The maximum.</param>
-        /// <returns></returns>
+        /// <returns>Returns a random value of int.</returns>
         private static int GetRandom(int min, int max)
         {
             return getRandom.Next(min, max);
         }
+
+        #endregion
     }
 }
