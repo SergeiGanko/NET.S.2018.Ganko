@@ -137,6 +137,48 @@ namespace BasicCoding.Tests
 
         #endregion
 
+        #region FindNthRoot Test
+
+        [TestMethod]
+        public void FindNthRoot_8_3_00001_Expects2()
+        {
+            double number = 8;
+            int degree = 3;
+            double precision = 0.0001;
+            double expectResult = 2;
+
+            double actualResult = FindNthRoot(number, degree, precision);
+
+            Assert.AreEqual(expectResult, actualResult);
+        }
+
+        [TestMethod]
+        public void FindNthRoot_Minus0008_3_01_ExpectsMinus02()
+        {
+            double number = -0.008;
+            int degree = 3;
+            double precision = 0.1;
+            double expectResult = -0.2;
+
+            double actualResult = FindNthRoot(number, degree, precision);
+
+            Assert.AreEqual(expectResult, actualResult);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void FindNthRoot_8_15_Minus7_ExpectsArgumentOutOfRangeException() => FindNthRoot(8, 15, -7);
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void FindNthRoot_9_0_001_ExpectsArgumentOutOfRangeException() => FindNthRoot(9, 0, 0.01);
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void FindNthRoot_Minus4_2_001_ExpectsArgumentOutOfRangeException() => FindNthRoot(-4, 2, 0.01);
+
+        #endregion
+
         #region Private Methods
 
         private static void InitializeActualResultArrayAndExpectResultArray(int n, int digit, int min, int max)

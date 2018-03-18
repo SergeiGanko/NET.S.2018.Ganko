@@ -208,5 +208,59 @@ namespace BasicCoding
         }
 
         #endregion
+
+        #region FindNthRoot method
+
+        /// <summary>
+        /// Finds the NTH root of number.
+        /// </summary>
+        /// <param name="number">The number.</param>
+        /// <param name="degree">The degree.</param>
+        /// <param name="precision">The precision.</param>
+        /// <returns>Returns a root</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Throws exception when argument degree less than 1
+        /// Throws exception when argument number is negative and degree is even
+        /// Throws exception when argument degree less than 0
+        /// </exception>
+        public static double FindNthRoot(double number, int degree, double precision)
+        {
+            if (degree < 1)
+            {
+                throw new ArgumentOutOfRangeException($"Argument of {nameof(degree)} must be greater than 0.");
+            }
+
+            if (number < 0 && degree % 2 == 0)
+            {
+                throw new ArgumentOutOfRangeException(
+                    $"A root of even degree from a negative number does not exist in the real number domain. "
+                    + $"Check following arguments: {nameof(number)}, {nameof(degree)}");
+            }
+
+            if (precision < 0)
+            {
+                throw new ArgumentOutOfRangeException($"Argument of {nameof(precision)} must be greater than 0.");
+            }
+
+            double x0 = degree;
+            double x1 = number / precision;
+
+            while (Math.Abs(x1 - x0) > precision)
+            {
+                x0 = x1;
+                x1 = 1d / degree * ((degree - 1) * x1 + (number / Math.Pow(x1, degree - 1)));
+            }
+
+            int q = 0;
+            while (precision < 1)
+            {
+                q++;
+                precision *= 10;
+            }
+
+            return Math.Round(x1, q);
+        }
+
+        #endregion
     }
 }
