@@ -1,14 +1,12 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
+using static BasicCoding.WorkingWithNumbers;
 
 namespace BasicCoding.Tests
 {
-    /// <summary>
-    /// Class tests the filtering of arrays by specific digit
-    /// </summary>
     [TestClass]
-    public class WorkingWithArraysTests
+    public class WorkingWithNumbersTests
     {
         #region Private Fields
 
@@ -31,12 +29,8 @@ namespace BasicCoding.Tests
 
         #region Filter Digit Tests
 
-        /// <summary>
-        /// Method calls FilterDigit method and passes to it array of ints and a specific digit
-        /// Expected result - array of ints with elements which contain the specific digit
-        /// </summary>
         [TestMethod]
-        public void FilterDigit_PassesArrayOfIntsAndDigit_ExpectsArrayWithElementWhichContainDigit()
+        public void FilterDigit_PassesArrayOfIntsAndDigit_ExpectsArrayWithElementsWhichContainDigit()
         {
             // Arrange
             int digit = 3;
@@ -44,18 +38,14 @@ namespace BasicCoding.Tests
             InitializeActualResultArrayAndExpectResultArray(n, digit, int.MinValue, int.MaxValue);
 
             // Act
-            var actualResultArray = WorkingWithArrays.FilterDigit(inputArray, digit);
+            var actualResultArray = FilterDigit(inputArray, digit);
 
             // Assert
             CollectionAssert.AreEqual(expectResultArray, actualResultArray);
         }
 
-        /// <summary>
-        /// Method calls FilterDigit method and passes to it array of positive ints and a specific digit
-        /// Expected result - array of ints with elements which contain the specific digit
-        /// </summary>
         [TestMethod]
-        public void FilterDigit_PassesArrayOfPositiveIntsAndDigit_ExpectsArrayWithElementWhichContainDigit()
+        public void FilterDigit_PassesArrayOfPositiveIntsAndDigit_ExpectsArrayWithElementsWhichContainDigit()
         {
             // Arrange
             int digit = 3;
@@ -63,18 +53,14 @@ namespace BasicCoding.Tests
             InitializeActualResultArrayAndExpectResultArray(n, digit, 0, int.MaxValue);
 
             // Act
-            var actualResultArray = WorkingWithArrays.FilterDigit(inputArray, digit);
+            var actualResultArray = FilterDigit(inputArray, digit);
 
             // Assert
             CollectionAssert.AreEqual(expectResultArray, actualResultArray);
         }
 
-        /// <summary>
-        /// Method calls FilterDigit method and passes to it array of negative ints and a specific digit
-        /// Expected result - array of ints with elements which contain the specific digit
-        /// </summary>
         [TestMethod]
-        public void FilterDigit_PassesArrayOfNegativeIntsAndDigit_ExpectsArrayWithElementWhichContainDigit()
+        public void FilterDigit_PassesArrayOfNegativeIntsAndDigit_ExpectsArrayWithElementsWhichContainDigit()
         {
             // Arrange
             int digit = 3;
@@ -82,38 +68,72 @@ namespace BasicCoding.Tests
             InitializeActualResultArrayAndExpectResultArray(n, digit, int.MinValue, 0);
 
             // Act
-            var actualResultArray = WorkingWithArrays.FilterDigit(inputArray, digit);
+            var actualResultArray = FilterDigit(inputArray, digit);
 
             // Assert
             CollectionAssert.AreEqual(expectResultArray, actualResultArray);
         }
 
-        /// <summary>
-        /// Method calls FilterDigit method and passes to it null as first argument and a specific digit
-        /// Expected result - throwing ArgumentNullException
-        /// </summary>
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
         public void FilterDigit_PassesNullAsArgument_ExpectsArgumentNullException()
-            => WorkingWithArrays.FilterDigit(null, 3);
+            => FilterDigit(null, 3);
 
-        /// <summary>
-        /// Method calls FilterDigit method and passes to it empty array and a specific digit
-        /// Expected result - throwing ArgumentException
-        /// </summary>
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void FilterDigit_PassesEmptyArray_ExpectsArgumentException()
-            => WorkingWithArrays.FilterDigit(new int[0], 3);
+            => FilterDigit(new int[0], 3);
 
-        /// <summary>
-        /// Method calls FilterDigit method and passes to it array of ints and a invalid digit
-        /// Expected result - throwing ArgumentException
-        /// </summary>
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void FilterDigit_PassesArrayAndInvalidDigit_ExpectsArgumentOutOfRangeException()
-            => WorkingWithArrays.FilterDigit(new[] { 51, 34, 173, 2, 69, 16, 3, 4 }, 12);
+            => FilterDigit(new[] { 51, 34, 173, 2, 69, 16, 3, 4 }, 12);
+
+        #endregion
+
+        #region FindNextBiggerNumber Test
+
+        [TestMethod]
+        public void FindNextBiggerNumber_Passes1234_Expects1243()
+        {
+            int inputNumber = 1234;
+            int expectNumber = 1243;
+
+            int actualNumber = FindNextBiggerNumber(inputNumber);
+
+            Assert.AreEqual(expectNumber, actualNumber);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void FindNextBiggerNumber_PassesIntMinValue_ExpectsArgumentOutOfRangeException() =>
+            FindNextBiggerNumber(int.MinValue);
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void FindNextBiggerNumber_PassesZero_ExpectsArgumentOutOfRangeException() =>
+            FindNextBiggerNumber(0);
+
+        [TestMethod]
+        public void FindNextBiggerNumber_Passes10_ExpectsMinus1() =>
+            FindNextBiggerNumber(10);
+
+        [TestMethod]
+        public void FindNextBiggerNumber_PassesIntMaxValue_ExpectsMinus1() =>
+            FindNextBiggerNumber(int.MaxValue);
+
+        [TestMethod]
+        public void FindNextBiggerNumberAndTimeOfWorking_Passes1234_Expects1243AndWorkingTime()
+        {
+            int inputNumber = 1234;
+            int expectNumber = 1243;
+            double expectMilliseconds = 1000000;
+
+            var tuple = FindNextBiggerNumberAndTimeOfWorking(inputNumber);
+
+            Assert.AreEqual(expectNumber, tuple.Item1);
+            //Assert.
+        }
 
         #endregion
 
