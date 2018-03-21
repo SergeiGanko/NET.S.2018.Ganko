@@ -4,6 +4,8 @@ using static BasicCoding.WorkingWithNumbers;
 
 namespace BasicCoding.NUnitTests
 {
+    using System.Diagnostics;
+
     [TestFixture]
     public class WorkingWithNumbersTests
     {
@@ -49,12 +51,10 @@ namespace BasicCoding.NUnitTests
         public void FindNextBiggerNumberAndTimeOfWorking_PassesValidNumber_ExpectsTupleOfNextBiggerNumberAndWokingTime(
             int inputNumber, int expectedNumber)
         {
-            double expectMilliseconds = 10;
-
             var tuple = FindNextBiggerNumberAndTimeOfWorking(inputNumber);
 
             Assert.AreEqual(expectedNumber, tuple.Item1);
-            Assert.GreaterOrEqual(expectMilliseconds, tuple.Item2);
+            Debug.WriteLine($"Method's working time: {tuple.Item2}");
         }
 
         [TestCase(414, 441)]
@@ -62,35 +62,65 @@ namespace BasicCoding.NUnitTests
         public void FindNextBiggerNumberAndTimeOfWorking_PassesValidNumberAndOutParameterOfMilliseconds_ExpectsNextBiggerNumberAndWokingTime(
             int inputNumber, int expectedNumber)
         {
-            double expectMilliseconds = 10;
-
             var actualNumber = FindNextBiggerNumberAndTimeOfWorking(inputNumber, out var actualMilliseconds);
 
             Assert.AreEqual(expectedNumber, actualNumber);
-            Assert.GreaterOrEqual(expectMilliseconds, actualMilliseconds);
+            Debug.WriteLine($"Method's working time: {actualMilliseconds}");
         }
 
         #endregion
 
         #region FindNthRootTests
 
-        [TestCase(1, 5, 0.0001, ExpectedResult = 1)]
-        [TestCase(8, 3, 0.0001, ExpectedResult = 2)]
-        [TestCase(0.001, 3, 0.0001, ExpectedResult = 0.1)]
-        [TestCase(0.04100625, 4, 0.0001, ExpectedResult = 0.45)]
-        [TestCase(8, 3, 0.0001, ExpectedResult = 2)]
-        [TestCase(0.0279936, 7, 0.0001, ExpectedResult = 0.6)]
-        [TestCase(0.0081, 4, 0.1, ExpectedResult = 0.3)]
-        [TestCase(-0.008, 3, 0.1, ExpectedResult = -0.2)]
-        [TestCase(0.004241979, 9, 0.00000001, ExpectedResult = 0.545)]
-        public double FindNthRoot_Number_Degree_Presicion_ExpectsRoot(double number, int degree, double precision) =>
-            FindNthRoot(number, degree, precision);
+        [TestCase(1, 5, 0.0001, 1)]
+        [TestCase(8, 3, 0.0001, 2)]
+        [TestCase(0.001, 3, 0.0001, 0.1)]
+        [TestCase(0.04100625, 4, 0.0001, 0.45)]
+        [TestCase(8, 3, 0.0001, 2)]
+        [TestCase(0.0279936, 7, 0.0001, 0.6)]
+        [TestCase(0.0081, 4, 0.1, 0.3)]
+        [TestCase(-0.008, 3, 0.1, -0.2)]
+        [TestCase(0.004241979, 9, 0.00000001, 0.545)]
+        public void FindNthRoot_Number_Degree_Presicion_ExpectsRoot(double number, int degree, double precision, double expected)
+        {
+            double actualResult = FindNthRoot(number, degree, precision);
+            Assert.AreEqual(expected, actualResult, precision);
+        }
 
         [TestCase(8, 15, -7)]
         [TestCase(9, 0, 0.01)]
         [TestCase(-4, 2, 0.01)]
         public void FindNthRoot_Number_Degree_Presicion_ArgumentOutOfRangeException(double number, int degree, double precision) =>
             Assert.Throws<ArgumentOutOfRangeException>(() => FindNthRoot(number, degree, precision));
+
+        #endregion
+
+        #region InsertNumberTests
+
+        [TestCase(0, 0, 0, 0, ExpectedResult = 0)]
+        [TestCase(15, 15, 0, 0, ExpectedResult = 15)]
+        [TestCase(8, 15, 0, 0, ExpectedResult = 9)]
+        [TestCase(8, 15, 3, 8, ExpectedResult = 120)]
+        [TestCase(-5, -2, 0, 0, ExpectedResult = -6)]
+        [TestCase(-5, -2, 2, 4, ExpectedResult = -5)]
+        public int InsertNumber_NumberSource_NumberIn_FromBit_ToBit_ExpectsNumber(
+            int numberSource, 
+            int numberIn, 
+            int fromBit, 
+            int toBit) 
+            => InsertNumber(numberSource, numberIn, fromBit, toBit);
+
+        [TestCase(8, 15, 5, 2)]
+        [TestCase(8, 15, -5, 2)]
+        [TestCase(8, 15, 5, -2)]
+        [TestCase(8, 15, 32, 2)]
+        [TestCase(8, 15, 5, 32)]
+        public void InsertNumber_NumberSource_NumberIn_FromBit_ToBit_ExpectsArgOutOfRangeException(
+            int numberSource,
+            int numberIn,
+            int fromBit,
+            int toBit) =>
+            Assert.Throws<ArgumentOutOfRangeException>((() => InsertNumber(numberSource, numberIn, fromBit, toBit)));
 
         #endregion
     }

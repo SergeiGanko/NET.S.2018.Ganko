@@ -248,17 +248,47 @@ namespace BasicCoding
             while (Math.Abs(x1 - x0) > precision)
             {
                 x0 = x1;
-                x1 = 1d / degree * ((degree - 1) * x1 + (number / Math.Pow(x1, degree - 1)));
+                x1 = 1.0 / degree * ((degree - 1) * x1 + (number / Math.Pow(x1, degree - 1)));
             }
 
-            int q = 0;
-            while (precision < 1)
+            return x1;
+        }
+
+        #endregion
+
+        #region InsertNumber
+
+        /// <summary>
+        /// Inserts bits of the numberIn to the numberSource.
+        /// </summary>
+        /// <param name="numberSource">The number in which the bits of the numberIn will be inserted.</param>
+        /// <param name="numberIn">Bits of this number are inserted in the source number.</param>
+        /// <param name="fromBit">The first bit of range.</param>
+        /// <param name="toBit">The last bit of range.</param>
+        /// <returns>Returns a new number that is obtained by inserting the number numberIn bits to the numberSource.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Throws when one of the conditions are true</exception>
+        public static int InsertNumber(int numberSource, int numberIn, int fromBit, int toBit)
+        {
+            if (fromBit > toBit || fromBit < 0 || toBit < 0 || toBit > 31 || fromBit > 31)
             {
-                q++;
-                precision *= 10;
+                throw new ArgumentOutOfRangeException(
+                    $"Invalid indexes of bits. Check following args: {nameof(fromBit)}, {nameof(toBit)}");
             }
 
-            return Math.Round(x1, q);
+            int range = toBit - fromBit + 1;
+            int mask = 0;
+            int i = 0;
+
+            while (i < range)
+            {
+                mask = (mask << 1) + 1;
+                i++;
+            }
+
+            mask <<= fromBit;
+            numberIn <<= fromBit;
+
+            return (~mask & numberSource) | (mask & numberIn);
         }
 
         #endregion

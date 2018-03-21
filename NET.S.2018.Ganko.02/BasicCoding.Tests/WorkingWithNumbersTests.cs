@@ -91,7 +91,7 @@ namespace BasicCoding.Tests
 
         #endregion
 
-        #region FindNextBiggerNumber Test
+        #region FindNextBiggerNumber Tests
 
         [TestMethod]
         public void FindNextBiggerNumber_Passes1234_Expects1243()
@@ -132,12 +132,11 @@ namespace BasicCoding.Tests
             var tuple = FindNextBiggerNumberAndTimeOfWorking(inputNumber);
 
             Assert.AreEqual(expectNumber, tuple.Item1);
-            //Assert.
         }
 
         #endregion
 
-        #region FindNthRoot Test
+        #region FindNthRoot Tests
 
         [TestMethod]
         public void FindNthRoot_8_3_00001_Expects2()
@@ -149,7 +148,7 @@ namespace BasicCoding.Tests
 
             double actualResult = FindNthRoot(number, degree, precision);
 
-            Assert.AreEqual(expectResult, actualResult);
+            Assert.AreEqual(expectResult, actualResult, precision);
         }
 
         [TestMethod]
@@ -162,7 +161,7 @@ namespace BasicCoding.Tests
 
             double actualResult = FindNthRoot(number, degree, precision);
 
-            Assert.AreEqual(expectResult, actualResult);
+            Assert.AreEqual(expectResult, actualResult, precision);
         }
 
         [TestMethod]
@@ -176,6 +175,46 @@ namespace BasicCoding.Tests
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void FindNthRoot_Minus4_2_001_ExpectsArgumentOutOfRangeException() => FindNthRoot(-4, 2, 0.01);
+
+        #endregion
+
+        #region InsertNumber Tests
+
+        [TestMethod]
+        public void InsertNumber_Passes8_15_0_0_Expects9()
+        {
+            int numberSource = 8;
+            int numberIn = 15;
+            int fromBit = 0;
+            int toBit = 0;
+            int expectedResult = 9;
+
+            int actualResult = InsertNumber(numberSource, numberIn, fromBit, toBit);
+
+            Assert.AreEqual(expectedResult, actualResult);
+        }
+
+        [TestMethod]
+        public void InsertNumber_Passes8_15_3_8_Expects120()
+        {
+            int numberSource = 8;
+            int numberIn = 15;
+            int fromBit = 3;
+            int toBit = 8;
+            int expectedResult = 120;
+
+            int actualResult = InsertNumber(numberSource, numberIn, fromBit, toBit);
+
+            Assert.AreEqual(expectedResult, actualResult);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void InsertNumber_Passes8_15_8_3_ExpectsAngumentOutOfRangeException() => InsertNumber(8, 15, 8, 3);
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void InsertNumber_Passes8_15_Minus8_3_ExpectsAngumentOutOfRangeException() => InsertNumber(8, 15, -8, 3);
 
         #endregion
 
