@@ -1,36 +1,69 @@
 ﻿using System;
 using System.Text;
+using System.Configuration;
 
 namespace WorkingWithPolynomial
 {
     /// <summary>
     /// Polinomial class
     /// </summary>
-    public class Polynomial
+    public sealed class Polynomial
     {
+        /// <summary>
+        /// The coeffs of the polynomial
+        /// </summary>
+        private readonly double[] coeffs = { };
+
+        /// <summary>
+        /// Initializes the <see cref="Polynomial"/> class.
+        /// </summary>
+        static Polynomial()
+        {
+            try
+            {
+                var appSettingsReader = new AppSettingsReader();
+
+                Epsilon = (double)appSettingsReader.GetValue("epsilon", typeof(double));
+            }
+            catch (InvalidOperationException)
+            {
+                Epsilon = 0.001;
+            }
+            catch (ArgumentNullException)
+            {
+                Epsilon = 0.001;
+            }
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Polynomial"/> class.
         /// </summary>
         /// <param name="coeffs">The coefficients of the polynomial.</param>
         /// <exception cref="System.ArgumentNullException">Throws when the coeffs is null</exception>
-        public Polynomial(double[] coeffs)
+        public Polynomial(params double[] coeffs)
         {
-            Coeffs = coeffs ?? throw new ArgumentNullException(
-                         $"Argument {nameof(coeffs)} is null!");
+            if (coeffs == null)
+            {
+                throw new ArgumentNullException($"Argument {nameof(coeffs)} is null!");
+            }
 
             if (coeffs.Length == 0)
             {
                 throw new ArgumentException($"{nameof(coeffs)} is empty");
             }
+
+            this.coeffs = new double[coeffs.Length];
+
+            coeffs.CopyTo(this.coeffs, 0);
         }
 
         /// <summary>
-        /// Gets the coeffs.
+        /// Gets the accuracy.
         /// </summary>
         /// <value>
-        /// The coeffs.
+        /// The accuracy.
         /// </value>
-        public double[] Coeffs { get; }
+        public static double Epsilon { get; }
 
         /// <summary>
         /// Gets the degree of the polynomial.
@@ -38,7 +71,21 @@ namespace WorkingWithPolynomial
         /// <value>
         /// The degree.
         /// </value>
-        public int Degree => Coeffs.Length;
+        public int Degree
+        {
+            get
+            {
+                for (int i = this.coeffs.Length - 1; i >= 0; i--)
+                {
+                    if (Math.Abs(this.coeffs[i]) > Epsilon)
+                    {
+                        return i;
+                    }
+                }
+
+                return -1;
+            }
+        }
 
         /// <summary>
         /// Gets the <see cref="System.Double"/> at the specified index.
@@ -53,108 +100,159 @@ namespace WorkingWithPolynomial
         {
             get
             {
-                if (index < 0 || index >= Coeffs.Length)
+                if (index < 0 || index >= Degree)
                 {
                     throw new ArgumentOutOfRangeException($"{nameof(index)} out of range");
                 }
 
-                return Coeffs[index];
+                return coeffs[index];
+            }
+
+            private set
+            {
+                if (index >= 0 && index < Degree)
+                {
+                    this.coeffs[index] = value;
+                }
             }
         }
 
         #region public methods
 
         /// <summary>
-        /// Adds the specified obj1.
+        /// Adds the specified lhs and rhs.
         /// </summary>
-        /// <param name="obj1">The obj1.</param>
-        /// <param name="obj2">The obj2.</param>
+        /// <param name="lhs">The lhs.</param>
+        /// <param name="rhs">The rhs.</param>
         /// <returns>Returns a new instance of the polynomial obtained by addition of two polynomials</returns>
-        public static Polynomial Add(Polynomial obj1, Polynomial obj2) => obj1 + obj2;
+        public static Polynomial Add(Polynomial lhs, Polynomial rhs) => lhs + rhs;
 
         /// <summary>
-        /// Adds the specified obj1.
+        /// Adds the specified lhs and rhs.
         /// </summary>
-        /// <param name="obj1">The obj1.</param>
-        /// <param name="obj2">The obj2.</param>
+        /// <param name="lhs">The lhs.</param>
+        /// <param name="rhs">The rhs.</param>
         /// <returns>Returns a new instance of the polynomial obtained by addition of two polynomials</returns>
-        public static Polynomial Add(Polynomial obj1, double[] obj2) => obj1 + obj2;
+        public static Polynomial Add(Polynomial lhs, double[] rhs) => lhs + rhs;
 
         /// <summary>
-        /// Adds the specified obj1.
+        /// Adds the specified lhs and rhs.
         /// </summary>
-        /// <param name="obj1">The obj1.</param>
-        /// <param name="obj2">The obj2.</param>
+        /// <param name="lhs">The lhs.</param>
+        /// <param name="rhs">The rhs.</param>
         /// <returns>Returns a new instance of the polynomial obtained by addition of two polynomials</returns>
-        public static Polynomial Add(double[] obj1, Polynomial obj2) => obj1 + obj2;
+        public static Polynomial Add(double[] lhs, Polynomial rhs) => lhs + rhs;
 
         /// <summary>
-        /// Subtracts the specified obj1.
+        /// Subtracts the specified lhs and rhs.
         /// </summary>
-        /// <param name="obj1">The obj1.</param>
-        /// <param name="obj2">The obj2.</param>
+        /// <param name="lhs">The lhs.</param>
+        /// <param name="rhs">The rhs.</param>
         /// <returns>Returns a new instance of the polynomial obtained by subtraction of two polynomials</returns>
-        public static Polynomial Subtract(Polynomial obj1, Polynomial obj2) => obj1 - obj2;
+        public static Polynomial Subtract(Polynomial lhs, Polynomial rhs) => lhs - rhs;
 
         /// <summary>
-        /// Subtracts the specified obj1.
+        /// Subtracts the specified lhs and rhs.
         /// </summary>
-        /// <param name="obj1">The obj1.</param>
-        /// <param name="obj2">The obj2.</param>
+        /// <param name="lhs">The lhs.</param>
+        /// <param name="rhs">The rhs.</param>
         /// <returns>Returns a new instance of the polynomial obtained by subtraction of two polynomials</returns>
-        public static Polynomial Subtract(Polynomial obj1, double[] obj2) => obj1 - obj2;
+        public static Polynomial Subtract(Polynomial lhs, double[] rhs) => lhs - rhs;
 
         /// <summary>
-        /// Subtracts the specified obj1.
+        /// Subtracts the specified lhs and rhs.
         /// </summary>
-        /// <param name="obj1">The obj1.</param>
-        /// <param name="obj2">The obj2.</param>
+        /// <param name="lhs">The lhs.</param>
+        /// <param name="obj2">The rhs.</param>
         /// <returns>Returns a new instance of the polynomial obtained by subtraction of two polynomials</returns>
-        public static Polynomial Subtract(double[] obj1, Polynomial obj2) => obj1 - obj2;
+        public static Polynomial Subtract(double[] lhs, Polynomial rhs) => lhs - rhs;
 
         /// <summary>
-        /// Multiplies the specified obj1.
+        /// Multiplies the specified lhs and rhs.
         /// </summary>
-        /// <param name="obj1">The obj1.</param>
-        /// <param name="obj2">The obj2.</param>
+        /// <param name="lhs">The lhs.</param>
+        /// <param name="rhs">The rhs.</param>
         /// <returns>Returns a new instance of the polynomial obtained by multiplication of two polynomials</returns>
-        public static Polynomial Multiply(Polynomial obj1, Polynomial obj2) => obj1 * obj2;
+        public static Polynomial Multiply(Polynomial lhs, Polynomial rhs) => lhs * rhs;
 
         /// <summary>
-        /// Multiplies the specified obj1.
+        /// Multiplies the specified lhs and rhs.
         /// </summary>
-        /// <param name="obj1">The obj1.</param>
-        /// <param name="obj2">The obj2.</param>
+        /// <param name="lhs">The lhs.</param>
+        /// <param name="rhs">The rhs.</param>
         /// <returns>Returns a new instance of the polynomial obtained by multiplication of two polynomials</returns>
-        public static Polynomial Multiply(Polynomial obj1, double[] obj2) => obj1 * obj2;
+        public static Polynomial Multiply(Polynomial lhs, double[] rhs) => lhs * rhs;
 
         /// <summary>
-        /// Multiplies the specified obj1.
+        /// Multiplies the specified lhs and rhs.
         /// </summary>
-        /// <param name="obj1">The obj1.</param>
-        /// <param name="obj2">The obj2.</param>
+        /// <param name="lhs">The lhs.</param>
+        /// <param name="rhs">The rhs.</param>
         /// <returns>Returns a new instance of the polynomial obtained by multiplication of two polynomials</returns>
-        public static Polynomial Multiply(double[] obj1, Polynomial obj2) => obj1 * obj2;
+        public static Polynomial Multiply(double[] lhs, Polynomial rhs) => lhs * rhs;
 
         #endregion
 
         #region System.Object virtual methods overridden
 
+        /// <summary>
+        /// Determines whether the specified <see cref="System.Object" />, is equal to this instance.
+        /// </summary>
+        /// <param name="obj">The <see cref="System.Object" /> to compare with this instance.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.
+        /// </returns>
         public override bool Equals(object obj)
         {
-            if (!(obj is Polynomial polynomial))
+            if (ReferenceEquals(null, obj))
             {
                 return false;
             }
 
-            if (polynomial.Degree != this.Degree)
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj.GetType() != this.GetType())
             {
                 return false;
             }
 
-            for (int i = 0; i < Coeffs.Length; i++)
+            return Equals((Polynomial)obj);
+        }
+
+
+        /// <summary>
+        /// Equalses the specified other.
+        /// </summary>
+        /// <param name="other">The other.</param>
+        /// <returns>Returns true if current polynomial equals other polynomial</returns>
+        public bool Equals(Polynomial other)
+        {
+            if (ReferenceEquals(null, other))
             {
-                if (polynomial[i] != this[i]) // ?????????????
+                return false;
+            }
+
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
+            if (this.Degree != other.Degree)
+            {
+                return false;
+            }
+
+            if (other.Degree != this.Degree)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < this.Degree; i++)
+            {
+                if (!this.coeffs[i].Equals(other.coeffs[i]))
                 {
                     return false;
                 }
@@ -163,11 +261,20 @@ namespace WorkingWithPolynomial
             return true;
         }
 
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
+        /// <summary>
+        /// Returns a hash code for this instance.
+        /// </summary>
+        /// <returns>
+        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+        /// </returns>
+        public override int GetHashCode() => this.Degree.GetHashCode() * 17 + this.coeffs.GetHashCode();
 
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String" /> that represents this instance.
+        /// </returns>
         public override string ToString()
         {
             if (Degree == 0)
@@ -177,9 +284,9 @@ namespace WorkingWithPolynomial
 
             var builder = new StringBuilder();
 
-            for (int i = 0; i < Degree; i++) // test! i=1 ????????????
+            for (int i = 0; i < Degree; i++)
             {
-                builder.Append(Coeffs[Degree]);
+                builder.Append(coeffs[Degree]);
                 builder.Append(" ");
             }
 
@@ -193,153 +300,153 @@ namespace WorkingWithPolynomial
         /// <summary>
         /// Implements the operator +.
         /// </summary>
-        /// <param name="obj1">The obj1.</param>
-        /// <param name="obj2">The obj2.</param>
+        /// <param name="lhs">The lhs.</param>
+        /// <param name="rhs">The rhs.</param>
         /// <returns>
         /// The result of the operator.
         /// </returns>
-        public static Polynomial operator +(Polynomial obj1, Polynomial obj2)
+        public static Polynomial operator +(Polynomial lhs, Polynomial rhs)
         {
-            CheckInput(obj1.Coeffs, obj2.Coeffs);
-            return new Polynomial(Sum(obj1.Coeffs, obj2.Coeffs));
+            CheckInput(lhs.coeffs, rhs.coeffs);
+            return new Polynomial(Sum(lhs.coeffs, rhs.coeffs));
         }
 
         /// <summary>
         /// Implements the operator +.
         /// </summary>
-        /// <param name="obj1">The obj1.</param>
-        /// <param name="obj2">The obj2.</param>
+        /// <param name="lhs">The lhs.</param>
+        /// <param name="rhs">The rhs.</param>
         /// <returns>
         /// The result of the operator.
         /// </returns>
-        public static Polynomial operator +(Polynomial obj1, double[] obj2)
+        public static Polynomial operator +(Polynomial lhs, double[] rhs)
         {
-            CheckInput(obj1.Coeffs, obj2);
-            return new Polynomial(Sum(obj1.Coeffs, obj2));
+            CheckInput(lhs.coeffs, rhs);
+            return new Polynomial(Sum(lhs.coeffs, rhs));
         }
 
         /// <summary>
         /// Implements the operator +.
         /// </summary>
-        /// <param name="obj1">The obj1.</param>
-        /// <param name="obj2">The obj2.</param>
+        /// <param name="lhs">The lhs.</param>
+        /// <param name="rhs">The rhs.</param>
         /// <returns>
         /// The result of the operator.
         /// </returns>
-        public static Polynomial operator +(double[] obj1, Polynomial obj2)
+        public static Polynomial operator +(double[] lhs, Polynomial rhs)
         {
-            CheckInput(obj1, obj2.Coeffs);
-            return new Polynomial(Sum(obj1, obj2.Coeffs));
+            CheckInput(lhs, rhs.coeffs);
+            return new Polynomial(Sum(lhs, rhs.coeffs));
         }
 
         /// <summary>
         /// Implements the operator -.
         /// </summary>
-        /// <param name="obj1">The obj1.</param>
-        /// <param name="obj2">The obj2.</param>
+        /// <param name="lhs">The lhs.</param>
+        /// <param name="rhs">The rhs.</param>
         /// <returns>
         /// The result of the operator.
         /// </returns>
-        public static Polynomial operator -(Polynomial obj1, Polynomial obj2)
+        public static Polynomial operator -(Polynomial lhs, Polynomial rhs)
         {
-            CheckInput(obj1.Coeffs, obj2.Coeffs);
-            return new Polynomial(Sub(obj1.Coeffs, obj2.Coeffs));
+            CheckInput(lhs.coeffs, rhs.coeffs);
+            return new Polynomial(Sub(lhs.coeffs, rhs.coeffs));
         }
 
         /// <summary>
         /// Implements the operator -.
         /// </summary>
-        /// <param name="obj1">The obj1.</param>
-        /// <param name="obj2">The obj2.</param>
+        /// <param name="lhs">The lhs.</param>
+        /// <param name="rhs">The rhs.</param>
         /// <returns>
         /// The result of the operator.
         /// </returns>
-        public static Polynomial operator -(Polynomial obj1, double[] obj2)
+        public static Polynomial operator -(Polynomial lhs, double[] rhs)
         {
-            CheckInput(obj1.Coeffs, obj2);
-            return new Polynomial(Sub(obj1.Coeffs, obj2));
+            CheckInput(lhs.coeffs, rhs);
+            return new Polynomial(Sub(lhs.coeffs, rhs));
         }
 
         /// <summary>
         /// Implements the operator -.
         /// </summary>
-        /// <param name="obj1">The obj1.</param>
-        /// <param name="obj2">The obj2.</param>
+        /// <param name="lhs">The lhs.</param>
+        /// <param name="rhs">The rhs.</param>
         /// <returns>
         /// The result of the operator.
         /// </returns>
-        public static Polynomial operator -(double[] obj1, Polynomial obj2)
+        public static Polynomial operator -(double[] lhs, Polynomial rhs)
         {
-            CheckInput(obj1, obj2.Coeffs);
-            return new Polynomial(Sub(obj1, obj2.Coeffs));
+            CheckInput(lhs, rhs.coeffs);
+            return new Polynomial(Sub(lhs, rhs.coeffs));
         }
 
         /// <summary>
         /// Implements the operator *.
         /// </summary>
-        /// <param name="obj1">The obj1.</param>
-        /// <param name="obj2">The obj2.</param>
+        /// <param name="lhs">The lhs.</param>
+        /// <param name="rhs">The rhs.</param>
         /// <returns>
         /// The result of the operator.
         /// </returns>
-        public static Polynomial operator *(Polynomial obj1, Polynomial obj2)
+        public static Polynomial operator *(Polynomial lhs, Polynomial rhs)
         {
-            CheckInput(obj1.Coeffs, obj2.Coeffs);
-            return new Polynomial(Mult(obj1.Coeffs, obj2.Coeffs));
+            CheckInput(lhs.coeffs, rhs.coeffs);
+            return new Polynomial(Mult(lhs.coeffs, rhs.coeffs));
         }
 
         /// <summary>
         /// Implements the operator *.
         /// </summary>
-        /// <param name="obj1">The obj1.</param>
-        /// <param name="obj2">The obj2.</param>
+        /// <param name="lhs">The lhs.</param>
+        /// <param name="rhs">The rhs.</param>
         /// <returns>
         /// The result of the operator.
         /// </returns>
-        public static Polynomial operator *(Polynomial obj1, double[] obj2)
+        public static Polynomial operator *(Polynomial lhs, double[] rhs)
         {
-            CheckInput(obj1.Coeffs, obj2);
-            return new Polynomial(Mult(obj1.Coeffs, obj2));
+            CheckInput(lhs.coeffs, rhs);
+            return new Polynomial(Mult(lhs.coeffs, rhs));
         }
 
         /// <summary>
         /// Implements the operator *.
         /// </summary>
-        /// <param name="obj1">The obj1.</param>
-        /// <param name="obj2">The obj2.</param>
+        /// <param name="lhs">The lhs.</param>
+        /// <param name="rhs">The rhs.</param>
         /// <returns>
         /// The result of the operator.
         /// </returns>
-        public static Polynomial operator *(double[] obj1, Polynomial obj2)
+        public static Polynomial operator *(double[] lhs, Polynomial rhs)
         {
-            CheckInput(obj1, obj2.Coeffs);
-            return new Polynomial(Mult(obj1, obj2.Coeffs));
+            CheckInput(lhs, rhs.coeffs);
+            return new Polynomial(Mult(lhs, rhs.coeffs));
         }
 
         /// <summary>
         /// Implements the operator ==.
         /// </summary>
-        /// <param name="obj1">The obj1.</param>
-        /// <param name="obj2">The obj2.</param>
+        /// <param name="lhs">The lhs.</param>
+        /// <param name="rhs">The rhs.</param>
         /// <returns>
         /// The result of the operator.
         /// </returns>
-        public static bool operator ==(Polynomial obj1, Polynomial obj2)
+        public static bool operator ==(Polynomial lhs, Polynomial rhs)
         {
-            return Equals(obj1, obj2);
+            return Equals(lhs.coeffs, rhs.coeffs);
         }
 
         /// <summary>
         /// Implements the operator !=.
         /// </summary>
-        /// <param name="obj1">The obj1.</param>
-        /// <param name="obj2">The obj2.</param>
+        /// <param name="lhs">The lhs.</param>
+        /// <param name="rhs">The rhs.</param>
         /// <returns>
         /// The result of the operator.
         /// </returns>
-        public static bool operator !=(Polynomial obj1, Polynomial obj2)
+        public static bool operator !=(Polynomial lhs, Polynomial rhs)
         {
-            return !Equals(obj1, obj2);
+            return !Equals(lhs.coeffs, rhs.coeffs);
         }
 
         #endregion
