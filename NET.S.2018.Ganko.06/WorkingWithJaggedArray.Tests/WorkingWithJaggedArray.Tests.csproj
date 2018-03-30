@@ -48,6 +48,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BubbleSorterTests.cs" />
+    <Compile Include="JaggedArrayByMaxAscendingSorter.cs" />
+    <Compile Include="JaggedArrayByMaxDescendingSorter.cs" />
+    <Compile Include="JaggedArrayByMinDescendingSorter.cs" />
+    <Compile Include="JaggedArrayByMinAscendingSorter.cs" />
+    <Compile Include="JaggedArrayBySumAscendingSorter.cs" />
+    <Compile Include="JaggedArrayBySumDescendingSorter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

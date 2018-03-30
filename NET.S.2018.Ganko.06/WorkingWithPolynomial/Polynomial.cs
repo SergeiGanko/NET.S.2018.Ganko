@@ -12,7 +12,7 @@ namespace WorkingWithPolynomial
         /// <summary>
         /// The coeffs of the polynomial
         /// </summary>
-        private readonly double[] coeffs = { };
+        private readonly double[] coeffs = {};
 
         /// <summary>
         /// Initializes the <see cref="Polynomial"/> class.
@@ -75,9 +75,9 @@ namespace WorkingWithPolynomial
         {
             get
             {
-                for (int i = this.coeffs.Length - 1; i >= 0; i--)
+                for (int i = coeffs.Length - 1; i >= 0; i--)
                 {
-                    if (Math.Abs(this.coeffs[i]) > Epsilon)
+                    if (Math.Abs(coeffs[i]) > Epsilon)
                     {
                         return i;
                     }
@@ -112,7 +112,7 @@ namespace WorkingWithPolynomial
             {
                 if (index >= 0 && index < Degree)
                 {
-                    this.coeffs[index] = value;
+                    coeffs[index] = value;
                 }
             }
         }
@@ -240,19 +240,19 @@ namespace WorkingWithPolynomial
                 return true;
             }
 
-            if (this.Degree != other.Degree)
+            if (Degree != other.Degree)
             {
                 return false;
             }
 
-            if (other.Degree != this.Degree)
+            if (other.Degree != Degree)
             {
                 return false;
             }
 
-            for (int i = 0; i < this.Degree; i++)
+            for (int i = 0; i < Degree; i++)
             {
-                if (!this.coeffs[i].Equals(other.coeffs[i]))
+                if (!coeffs[i].Equals(other.coeffs[i]))
                 {
                     return false;
                 }

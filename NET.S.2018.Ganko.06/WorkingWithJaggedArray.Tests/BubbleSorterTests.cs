@@ -14,19 +14,23 @@ namespace WorkingWithJaggedArray.Tests
             {
                 new[] { 4, 1, 5 },
                 new[] { 7, 2 },
+                null,
+                null,
                 new[] { 3, 1, 6, 2 }
             };
 
-            var jaggedArrayBySum = new JaggedArrayBySumSorter();
+            var jaggedArrayBySumAsc = new JaggedArrayBySumAscendingSorter();
 
             int[][] expectedArray =
             {
                 new[] { 7, 2 },
                 new[] { 4, 1, 5 },
-                new[] { 3, 1, 6, 2 }
+                new[] { 3, 1, 6, 2 },
+                null,
+                null
             };
 
-            Sort(testArray, jaggedArrayBySum, Order.Ascending);
+            Sort(testArray, jaggedArrayBySumAsc);
 
             CollectionAssert.AreEqual(testArray, expectedArray);
         }
@@ -37,20 +41,24 @@ namespace WorkingWithJaggedArray.Tests
             int[][] testArray =
                 {
                     new[] { 4, 1, 5, },
+                    null,
                     new[] { 7, 2 },
+                    null,
                     new[] { 3, 1, 6, 2 },
                 };
 
-            var jaggedArrayBySum = new JaggedArrayBySumSorter();
+            var jaggedArrayBySumDesc = new JaggedArrayBySumDescendingSorter();
 
             int[][] expectedArray =
                 {
                     new[] { 3, 1, 6, 2 },
                     new[] { 4, 1, 5 },
-                    new[] { 7, 2 }
+                    new[] { 7, 2 },
+                    null,
+                    null
                 };
 
-            Sort(testArray, jaggedArrayBySum, Order.Descending);
+            Sort(testArray, jaggedArrayBySumDesc);
 
             CollectionAssert.AreEqual(testArray, expectedArray);
         }
@@ -60,21 +68,25 @@ namespace WorkingWithJaggedArray.Tests
         {
             int[][] testArray =
                 {
+                    null,
+                    null,
                     new[] { 4, 1, 5 },
                     new[] { 7, 2 },
                     new[] { 3, 1, 6, 2 }
                 };
 
-            var jaggedArrayByMax = new JaggedArrayByMaxSorter();
+            var jaggedArrayByMaxAsc = new JaggedArrayByMaxAscendingSorter();
 
             int[][] expectedArray =
                 {
                     new[] { 4, 1, 5 },
                     new[] { 3, 1, 6, 2 },
-                    new[] { 7, 2 }
+                    new[] { 7, 2 },
+                    null,
+                    null
                 };
 
-            Sort(testArray, jaggedArrayByMax, Order.Ascending);
+            Sort(testArray, jaggedArrayByMaxAsc);
 
             CollectionAssert.AreEqual(testArray, expectedArray);
         }
@@ -85,20 +97,22 @@ namespace WorkingWithJaggedArray.Tests
             int[][] testArray =
                 {
                     new[] { 4, 1, 5 },
+                    null,
                     new[] { 7, 2 },
                     new[] { 3, 1, 6, 2 }
                 };
 
-            var jaggedArrayByMax = new JaggedArrayByMaxSorter();
+            var jaggedArrayByMaxDesc = new JaggedArrayByMaxDescendingSorter();
 
             int[][] expectedArray =
                 {
                     new[] { 7, 2 },
                     new[] { 3, 1, 6, 2 },
-                    new[] { 4, 1, 5 }
+                    new[] { 4, 1, 5 },
+                    null
                 };
 
-            Sort(testArray, jaggedArrayByMax, Order.Descending);
+            Sort(testArray, jaggedArrayByMaxDesc);
 
             CollectionAssert.AreEqual(testArray, expectedArray);
         }
@@ -110,19 +124,21 @@ namespace WorkingWithJaggedArray.Tests
                 {
                     new[] { 4, 1, 5, },
                     new[] { 7, 2 },
+                    null,
                     new[] { 3, 1, 6, 2 },
                 };
 
-            var jaggedArrayByMin = new JaggedArrayByMinSorter();
+            var jaggedArrayByMinAsc = new JaggedArrayByMinAscendingSorter();
 
             int[][] expectedArray =
                 {
                     new[] { 4, 1, 5 },
                     new[] { 3, 1, 6, 2 },
-                    new[] { 7, 2 }
+                    new[] { 7, 2 },
+                    null
                 };
 
-            Sort(testArray, jaggedArrayByMin, Order.Ascending);
+            Sort(testArray, jaggedArrayByMinAsc);
 
             CollectionAssert.AreEqual(testArray, expectedArray);
         }
@@ -132,21 +148,23 @@ namespace WorkingWithJaggedArray.Tests
         {
             int[][] testArray =
                 {
+                    null,
                     new[] { 4, 2, 5, },
                     new[] { 7, 3 },
                     new[] { 3, 1, 6, 2 },
                 };
 
-            var jaggedArrayByMin = new JaggedArrayByMinSorter();
+            var jaggedArrayByMinDesc = new JaggedArrayByMinDescendingSorter();
 
             int[][] expectedArray =
                 {
                     new[] { 7, 3 },
                     new[] { 4, 2, 5 },
-                    new[] { 3, 1, 6, 2 }
+                    new[] { 3, 1, 6, 2 },
+                    null
                 };
 
-            Sort(testArray, jaggedArrayByMin, Order.Descending);
+            Sort(testArray, jaggedArrayByMinDesc);
 
             CollectionAssert.AreEqual(testArray, expectedArray);
         }
@@ -154,7 +172,7 @@ namespace WorkingWithJaggedArray.Tests
         [Test]
         public void Sort_PassNullInsteadArray_ExpectArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => Sort(null, null, Order.Ascending));
+            Assert.Throws<ArgumentNullException>(() => Sort(null, null));
         }
 
         [Test]
@@ -162,7 +180,7 @@ namespace WorkingWithJaggedArray.Tests
         {
             var testArray = new int[][] { new[] { 1, 2 }, new[] { 5, 6 } };
 
-            Assert.Throws<ArgumentNullException>(() => Sort(testArray, null, Order.Ascending));
+            Assert.Throws<ArgumentNullException>(() => Sort(testArray, null));
         }
     }
 }
