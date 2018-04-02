@@ -1,31 +1,54 @@
 ﻿using System;
+using System.Diagnostics;
 using NUnit.Framework;
 using static BasicCoding.WorkingWithNumbers;
 
 namespace BasicCoding.NUnitTests
 {
-    using System.Diagnostics;
-
     [TestFixture]
     public class WorkingWithNumbersTests
     {
         #region FilterDigitTests
 
         [Test, TestCaseSource(typeof(DataForTests), nameof(DataForTests.FilerDigitTestCases))]
-        public int[] FilterDigit_PassesArrayAndDigit_ExpectsArrayWithElementsWhichContainDigit(int[] input, int digit) =>
-            FilterDigit(input, digit);
+        public int[] FilterDigit_PassesArrayAndDigit_ExpectsArrayWithElementsWhichContainDigit(int[] input, IPredicate predicate) =>
+            FilterDigit(input, predicate);
 
         [Test]
         public void FilterDigit_PassesNullAsArgument_ExpectsArgumentNullException() =>
-            Assert.Throws<ArgumentNullException>(() => FilterDigit(null, 3));
+            Assert.Throws<ArgumentNullException>(() => FilterDigit(null, new ContainDigit(1)));
 
         [Test]
         public void FilterDigit_PassesEmptyArray_ExpectsArgumentException() =>
-            Assert.Throws<ArgumentException>(() => FilterDigit(new int[0], 3));
+            Assert.Throws<ArgumentException>(() => FilterDigit(new int[0], new ContainDigit(2)));
 
         [Test]
         public void FilterDigit_PassesArrayAndInvalidDigit_ExpectsArgumentOutOfRangeException() =>
-            Assert.Throws<ArgumentOutOfRangeException>(() => FilterDigit(new int[] { 3, 23, 8 }, 12));
+            Assert.Throws<ArgumentOutOfRangeException>(() => FilterDigit(new int[] { 3, 23, 8 }, new ContainDigit(12)));
+
+        [Test]
+        public void FilterDigit_FilterNegativeNembers()
+        {
+            int[] testArray = { 65, 123542, -3421, 0, 234, -6, -75 };
+            IPredicate predicate = new NegativeNumber();
+            int[] expectedArray = { -3421, -6, -75 };
+
+            int[] actualArray = FilterDigit(testArray, predicate);
+
+            CollectionAssert.AreEqual(expectedArray, actualArray);
+        }
+
+        [Test]
+        public void FilterDigit_FilterEvenNumbers()
+        {
+            int[] testArray = { 65, 123542, -3421, 0, 234, -6, -75 };
+            IPredicate predicate = new EvenNumber();
+            int[] expectedArray = { 123542, 0, 234, -6 };
+
+            int[] actualArray = FilterDigit(testArray, predicate);
+
+            CollectionAssert.AreEqual(expectedArray, actualArray);
+        }
 
         #endregion
 

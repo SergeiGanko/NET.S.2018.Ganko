@@ -49,6 +49,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataForTests.cs" />
+    <Compile Include="ContainDigit.cs" />
+    <Compile Include="EvenNumber.cs" />
+    <Compile Include="NegativeNumber.cs" />
     <Compile Include="WorkingWithNumbersTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

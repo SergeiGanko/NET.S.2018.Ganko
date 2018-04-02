@@ -137,7 +137,37 @@ namespace Streams
         /// <returns>Returns copied bytes quantity</returns>
         public static int InMemoryByBlockCopy(string sourcePath, string destinationPath)
         {
-            throw new NotImplementedException();
+            InputValidation(sourcePath, destinationPath);
+
+            int writtenBytes = 0;
+
+            using (StreamReader reader = File.OpenText(sourcePath))
+            {
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    using (StreamWriter writer = new StreamWriter(destinationPath))
+                    {
+                        byte[] buffer = null;
+                        char[] array = new char[100];
+                        byte[] resultArray = null;
+                        int bytesRead;
+                        int offset = 0;
+                        while ((bytesRead = reader.Read(array, offset, array.Length - offset)) > 0)
+                        {
+                            offset += bytesRead;
+                            buffer = Encoding.UTF8.GetBytes()
+                            memoryStream.Write(buffer, 0, buffer.Length);
+                            resultArray = memoryStream.ToArray();
+
+                            writer.Write();
+                        }
+
+                        writtenBytes = writer.Encoding.GetByteCount(array);
+                    }
+                }
+            }
+
+            return writtenBytes;
         }
 
         #endregion

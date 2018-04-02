@@ -9,11 +9,11 @@ namespace BasicCoding.NUnitTests
         {
             get
             {
-                yield return new TestCaseData(new int[] { -1, -53, -12412312, -555, -2137 }, 3)
+                yield return new TestCaseData(new int[] { -1, -53, -12412312, -555, -2137 }, new ContainDigit(3))
                     .Returns(new int[] { -53, -12412312, -2137 });
-                yield return new TestCaseData(new int[] { int.MaxValue, -1, 0, 535, -2, -7341451, int.MinValue }, 3)
+                yield return new TestCaseData(new int[] { int.MaxValue, -1, 0, 535, -2, -7341451, int.MinValue }, new ContainDigit(3))
                     .Returns(new int[] { int.MaxValue, 535, -7341451, int.MinValue });
-                yield return new TestCaseData(new int[] { 0, 1, 0, 1, 0, 0 }, 0)
+                yield return new TestCaseData(new int[] { 0, 1, 0, 1, 0, 0 }, new ContainDigit(0))
                     .Returns(new int[] { 0, 0, 0, 0 });
             }
         }

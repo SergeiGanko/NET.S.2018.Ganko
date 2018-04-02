@@ -13,12 +13,14 @@ namespace BasicCoding
         #region FilterDigit methods
 
         /// <summary>
-        /// Method filtering elements of array which contain a specific digit
+        /// Filters the digit.
         /// </summary>
-        /// <param name="input">Input array of ints</param>
-        /// <param name="digit">input digit(0-9)</param>
+        /// <param name="input">The input array</param>
+        /// <param name="predicate">The predicate.</param>
         /// <returns>Returns filtered array</returns>
-        public static int[] FilterDigit(int[] input, int digit)
+        /// <exception cref="ArgumentNullException">Throws when input is null</exception>
+        /// <exception cref="ArgumentException">Throws when input is empty</exception>
+        public static int[] FilterDigit(int[] input, IPredicate predicate)
         {
             if (input == null)
             {
@@ -30,48 +32,17 @@ namespace BasicCoding
                 throw new ArgumentException($"{nameof(input)} is empty");
             }
 
-            if (digit < 0 || digit > 9)
-            {
-                throw new ArgumentOutOfRangeException($"Invalid argument - {nameof(digit)}");
-            }
-
             var temp = new List<int>();
 
-            foreach (var i in input)
+            foreach (var item in input)
             {
-                if (IsDigitContains(i, digit))
+                if (predicate.IsMatch(item))
                 {
-                    temp.Add(i);
+                    temp.Add(item);
                 }
             }
 
             return temp.ToArray();
-        }
-
-        /// <summary>
-        /// This method searches for the occurrence of a specific digit in a number
-        /// </summary>
-        /// <param name="number">Represents element of array</param>
-        /// <param name="digit">Represents a specific digit</param>
-        /// <returns>Returns true if number contains digit</returns>
-        private static bool IsDigitContains(int number, int digit)
-        {
-            if (number == digit)
-            {
-                return true;
-            }
-
-            while (number > 0 || number < 0)
-            {
-                if (number % 10 == digit || number % 10 == -digit)
-                {
-                    return true;
-                }
-
-                number /= 10;
-            }
-
-            return false;
         }
 
         #endregion
