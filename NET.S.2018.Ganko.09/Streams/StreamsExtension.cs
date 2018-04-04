@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Text;
 
 namespace Streams
 {
-    using System.CodeDom;
-    using System.Linq;
-
     // C# 6.0 in a Nutshell. Joseph Albahari, Ben Albahari. O'Reilly Media. 2015
     // Chapter 15: Streams and I/O
     // Chapter 6: Framework Fundamentals - Text Encodings and Unicode
@@ -31,7 +27,7 @@ namespace Streams
         /// <returns>Returns copied bytes quantity</returns>
         public static int ByByteCopy(string sourcePath, string destinationPath)
         {
-            InputValidation(sourcePath, destinationPath);
+            ValidateInput(sourcePath, destinationPath);
 
             int writtenBytes = 0;
 
@@ -60,27 +56,31 @@ namespace Streams
         /// <returns>Returns copied bytes quantity</returns>
         public static int InMemoryByByteCopy(string sourcePath, string destinationPath)
         {
-            InputValidation(sourcePath, destinationPath);
+            ValidateInput(sourcePath, destinationPath);
 
-            byte[] buffer = null;
             int writtenBytes = 0;
+            string sourceString = null;
+
             using (StreamReader reader = File.OpenText(sourcePath))
             {
-                buffer = Encoding.UTF8.GetBytes(reader.ReadToEnd());
+                sourceString = reader.ReadToEnd();
             }
 
-            using (var memoryStream = new MemoryStream(buffer, 0, buffer.Length))
-            {
-                memoryStream.Write(buffer, 0, buffer.Length);
-                buffer = memoryStream.ToArray();
-            }
+            byte[] buffer = Encoding.UTF8.GetBytes(sourceString);
 
-            char[] array = Encoding.UTF8.GetChars(buffer);
-
-            using (StreamWriter writer = new StreamWriter(destinationPath))
+            using (MemoryStream memoryStream = new MemoryStream(buffer))
             {
-                writer.Write(array);
-                writtenBytes = writer.Encoding.GetByteCount(array);
+                byte[] destinationBytes = new byte[buffer.Length];
+
+                memoryStream.Read(destinationBytes, 0, (int)memoryStream.Length);
+
+                char[] destinationChars = Encoding.UTF8.GetChars(destinationBytes);
+
+                using (StreamWriter writer = new StreamWriter(destinationPath))
+                {
+                    writer.Write(destinationChars);
+                    writtenBytes = writer.Encoding.GetByteCount(destinationChars);
+                }
             }
 
             return writtenBytes;
@@ -98,7 +98,7 @@ namespace Streams
         /// <returns>Returns copied bytes quantity</returns>
         public static int ByBlockCopy(string sourcePath, string destinationPath)
         {
-            InputValidation(sourcePath, destinationPath);
+            ValidateInput(sourcePath, destinationPath);
 
             int writtenBytes = 0;
 
@@ -137,33 +137,37 @@ namespace Streams
         /// <returns>Returns copied bytes quantity</returns>
         public static int InMemoryByBlockCopy(string sourcePath, string destinationPath)
         {
-            InputValidation(sourcePath, destinationPath);
+            ValidateInput(sourcePath, destinationPath);
 
+            const int length = 0x1000;
             int writtenBytes = 0;
+            char[] block = new char[length];
+            var sourceString = new StringBuilder();
+            int readedBlock = 0;
 
             using (StreamReader reader = File.OpenText(sourcePath))
             {
-                using (MemoryStream memoryStream = new MemoryStream())
+                while ((readedBlock = reader.ReadBlock(block, 0, length)) != 0)
                 {
-                    using (StreamWriter writer = new StreamWriter(destinationPath))
+                    sourceString.Append(block, 0, readedBlock);
+                }
+            }
+
+            byte[] buffer = Encoding.UTF8.GetBytes(sourceString.ToString());
+
+            using (var memoryStream = new MemoryStream(buffer))
+            {
+                using (var writer = new StreamWriter(destinationPath))
+                {
+                    byte[] bytesBlock = new byte[length];
+
+                    while ((readedBlock = memoryStream.Read(bytesBlock, 0, length)) != 0)
                     {
-                        byte[] buffer = null;
-                        char[] array = new char[100];
-                        byte[] resultArray = null;
-                        int bytesRead;
-                        int offset = 0;
-                        while ((bytesRead = reader.Read(array, offset, array.Length - offset)) > 0)
-                        {
-                            offset += bytesRead;
-                            buffer = Encoding.UTF8.GetBytes()
-                            memoryStream.Write(buffer, 0, buffer.Length);
-                            resultArray = memoryStream.ToArray();
-
-                            writer.Write();
-                        }
-
-                        writtenBytes = writer.Encoding.GetByteCount(array);
+                        char[] charsBlock = Encoding.UTF8.GetChars(bytesBlock);
+                        writer.Write(charsBlock);
                     }
+
+                    writtenBytes = (int)memoryStream.Length;
                 }
             }
 
@@ -182,13 +186,13 @@ namespace Streams
         /// <returns>Returns copied bytes quantity</returns>
         public static int BufferedCopy(string sourcePath, string destinationPath)
         {
-            InputValidation(sourcePath, destinationPath);
+            ValidateInput(sourcePath, destinationPath);
 
+            const int length = 0x1000;
             int writtenBytes = 0;
 
             using (FileStream readStream = File.OpenRead(sourcePath))
             {
-                int length = (int)readStream.Length;
                 byte[] buffer = new byte[length];
 
                 using (BufferedStream bufferedStream = new BufferedStream(readStream, length))
@@ -198,9 +202,9 @@ namespace Streams
                         int bytesRead = 0;
                         int offset = 0;
 
-                        while ((bytesRead = bufferedStream.Read(buffer, offset, length - offset)) > 0)
+                        while ((bytesRead = bufferedStream.Read(buffer, 0, length)) > 0)
                         {
-                            writeStream.Write(buffer, 0, bytesRead);
+                            writeStream.Write(buffer, 0, buffer.Length);
                             offset += bytesRead;
                         }
 
@@ -224,7 +228,7 @@ namespace Streams
         /// <returns>Returns copied string lines quantity</returns>
         public static int ByLineCopy(string sourcePath, string destinationPath)
         {
-            InputValidation(sourcePath, destinationPath);
+            ValidateInput(sourcePath, destinationPath);
 
             int writtenSrtings = 0;
 
@@ -261,7 +265,7 @@ namespace Streams
         /// </returns>
         public static bool IsContentEquals(string sourcePath, string destinationPath)
         {
-            InputValidation(sourcePath, destinationPath);
+            ValidateInput(sourcePath, destinationPath);
 
             if (sourcePath == destinationPath)
             {
@@ -310,7 +314,7 @@ namespace Streams
         /// <param name="destinationPath">The destination path.</param>
         /// <exception cref="ArgumentException">Throws when sourcePath or destinationPath is invalid</exception>
         /// <exception cref="FileNotFoundException">Throws when file is not found</exception>
-        private static void InputValidation(string sourcePath, string destinationPath)
+        private static void ValidateInput(string sourcePath, string destinationPath)
         {
             if (!IsValidFileName(sourcePath))
             {
