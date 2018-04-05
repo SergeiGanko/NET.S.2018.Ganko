@@ -7,9 +7,9 @@ namespace Books
     /// <summary>
     /// Book class
     /// </summary>
-    /// <seealso cref="System.IComparable" />
-    /// <seealso cref="System.IComparable{Books.Book}" />
-    /// <seealso cref="System.IEquatable{Books.Book}" />
+    /// <seealso cref="System.IComparable"/>
+    /// <seealso cref="System.IComparable{Books.Book}"/>
+    /// <seealso cref="System.IEquatable{Books.Book}"/>
     /// <seealso cref="System.IFormattable" />
     public sealed class Book : IComparable, IComparable<Book>, IEquatable<Book>, IFormattable
     {

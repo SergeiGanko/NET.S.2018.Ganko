@@ -55,14 +55,22 @@ namespace Books.Service
             books.Remove(book);
         }
 
-        public Book FindBookByTag(Predicate<Book> predicate)
+        public Book FindBookByTag(IPredicate predicate)
         {
             if (ReferenceEquals(predicate, null))
             {
                 throw new ArgumentNullException($"Argument {nameof(predicate)} is null");
             }
 
-            return books.Find(predicate);
+            foreach (var book in books)
+            {
+                if (predicate.isMatch(book))
+                {
+                    return book;
+                }
+            }
+
+            return null;
         }
 
         public void SortBooksByTag(IComparer<Book> comparer)
