@@ -4,10 +4,22 @@ using System.IO;
 
 namespace Books.Storage
 {
+    /// <summary>
+    /// The book storage
+    /// </summary>
+    /// <seealso cref="Books.Storage.IBookListStorage" />
     public class BookListStorage : IBookListStorage
     {
+        /// <summary>
+        /// The file path
+        /// </summary>
         private readonly string path;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BookListStorage"/> class.
+        /// </summary>
+        /// <param name="path">The file path</param>
+        /// <exception cref="ArgumentException">Throws when file path is null or empty or whitespace</exception>
         public BookListStorage(string path)
         {
             if (string.IsNullOrWhiteSpace(path))
@@ -18,8 +30,18 @@ namespace Books.Storage
             this.path = path;
         }
 
-        public ICollection<Book> LoadBooks()
+        /// <summary>
+        /// Loads the books.
+        /// </summary>
+        /// <returns>Returns collection of books</returns>
+        /// <exception cref="InvalidOperationException">Throws when file not found.</exception>
+        public IEnumerable<Book> LoadBooks()
         {
+            if (!File.Exists(path))
+            {
+                throw new InvalidOperationException("File not found.");
+            }
+
             var books = new List<Book>();
 
             using (var fs = File.OpenRead(path))
@@ -43,7 +65,11 @@ namespace Books.Storage
             return books;
         }
 
-        public void SaveBooks(ICollection<Book> books)
+        /// <summary>
+        /// Saves the books.
+        /// </summary>
+        /// <param name="books">The collection of books</param>
+        public void SaveBooks(IEnumerable<Book> books)
         {
             using (var fs = File.Create(path))
             {

@@ -13,9 +13,6 @@ namespace Books
     /// <seealso cref="System.IFormattable" />
     public sealed class Book : IComparable, IComparable<Book>, IEquatable<Book>, IFormattable
     {
-        private const string isbnPattern =
-            @"^(?:ISBN(?:-13)?:?\)?(?=[0-9]{13}$|(?=(?:[0-9]+[-\]){4})[-\0-9]{17}$)97[89][-\]?[0-9]{1,5}[-\]?[0-9]+[-\]?[0-9]+[-\]?[0-9]$";
-
         /// <summary>
         /// Initializes a new instance of the <see cref="Book"/> class.
         /// </summary>
@@ -89,7 +86,7 @@ namespace Books
         /// </returns>
         public override bool Equals(object obj)
         {
-            return obj is Book book && this.Equals(book);
+            return obj != null && (obj is Book book && this.Equals(book));
         }
 
         /// <summary>
@@ -100,7 +97,13 @@ namespace Books
         /// </returns>
         public override int GetHashCode()
         {
-            return this.Isbn.GetHashCode();
+            return Isbn.GetHashCode() ^ 
+                   Author.GetHashCode() ^ 
+                   Title.GetHashCode() ^
+                   Publisher.GetHashCode() ^
+                   PublishingYear.GetHashCode() ^
+                   PagesNumber.GetHashCode() ^
+                   Price.GetHashCode();
         }
 
         /// <summary>
@@ -138,7 +141,13 @@ namespace Books
                 return true;
             }
 
-            return this.Isbn == other.Isbn;
+            return this.Isbn == other.Isbn &&
+                   this.Author == other.Author &&
+                   this.Title == other.Title &&
+                   this.Publisher == other.Publisher &&
+                   this.PublishingYear == other.PublishingYear &&
+                   this.PagesNumber == other.PagesNumber &&
+                   this.Price == other.Price;
         }
 
         #endregion
@@ -155,9 +164,14 @@ namespace Books
         /// <exception cref="InvalidOperationException">Throws when the obj isn't a Book</exception>
         public int CompareTo(object obj)
         {
-            if (!(obj is Book))
+            if (ReferenceEquals(obj, null))
             {
-                throw new InvalidOperationException($"{nameof(obj)} is not a Book");
+                return 1;
+            }
+
+            if (this.GetType() != obj.GetType())
+            {
+                return 1;
             }
 
             return this.CompareTo((Book)obj);
@@ -176,7 +190,7 @@ namespace Books
         /// </returns>
         public int CompareTo(Book other)
         {
-            if (Equals(other))
+            if (ReferenceEquals(this, other))
             {
                 return 0;
             }
@@ -186,7 +200,7 @@ namespace Books
                 return 1;
             }
 
-            return string.Compare(this.Title, other.Title, StringComparison.Ordinal);
+            return string.Compare(this.Title, other.Title, StringComparison.CurrentCulture);
         }
 
         #endregion
@@ -204,14 +218,14 @@ namespace Books
         /// <exception cref="FormatException">Throws when format is invalid</exception>
         public string ToString(string format, IFormatProvider formatProvider)
         {
+            if (ReferenceEquals(formatProvider, null))
+            {
+                formatProvider = CultureInfo.CurrentCulture;
+            }
+
             if (string.IsNullOrEmpty(format))
             {
                 format = "G";
-            }
-
-            if (formatProvider == null)
-            {
-                formatProvider = CultureInfo.CurrentCulture;
             }
 
             switch (format.ToUpperInvariant())
@@ -220,11 +234,12 @@ namespace Books
                     return $"{Author}, {Title}";
                 case "ATPY":
                     return $"{Author}, {Title}, \"{Publisher}\", {PublishingYear}";
-                case "G":
                 case "IATPYN":
                     return $"ISBN 13: {Isbn}, {Author}, {Title}, \"{Publisher}\", {PublishingYear}, {PagesNumber}";
+                case "G":
                 case "IATPYNP":
-                    return $"ISBN 13: {Isbn}, {Author}, {Title}, \"{Publisher}\", {PublishingYear}, {PagesNumber}, {Price.ToString("C", formatProvider)}";
+                    return $"ISBN 13: {Isbn}, {Author}, {Title}, \"{Publisher}\", {PublishingYear}, " + 
+                           $"{PagesNumber}, {Price.ToString("C", formatProvider)}";
                 default:
                     throw new FormatException($"Invalid argument {nameof(format)}");
             }
@@ -264,6 +279,8 @@ namespace Books
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         private static void ValidateInput(string isbn, string author, string title, string publicher, int year, int pages, decimal price)
         {
+            string isbnPattern = @"(?=[0-9]{13}$|(?=(?:[0-9]+[- ]){4})[- 0-9]{17}$)97[89][- ]?[0-9]{1,5}[- ]?[0-9]+[- ]?[0-9]+[- ]?[0-9]";
+
             if (string.IsNullOrWhiteSpace(isbn))
             {
                 throw new ArgumentException($"Invalid argument {nameof(isbn)}");

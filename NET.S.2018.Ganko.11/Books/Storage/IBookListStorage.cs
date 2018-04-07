@@ -1,11 +1,11 @@
-﻿namespace Books.Storage
-{
-    using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
+namespace Books.Storage
+{
     public interface IBookListStorage
     {
-        ICollection<Book> LoadBooks();
+        IEnumerable<Book> LoadBooks();
 
-        void SaveBooks(ICollection<Book> books);
+        void SaveBooks(IEnumerable<Book> books);
     }
 }

@@ -1,7 +1,7 @@
 ﻿namespace Books.Service
 {
-    public interface IPredicate
+    public interface IPredicate<T>
     {
-        bool isMatch(Book book);
+        bool isMatch(T t);
     }
 }
