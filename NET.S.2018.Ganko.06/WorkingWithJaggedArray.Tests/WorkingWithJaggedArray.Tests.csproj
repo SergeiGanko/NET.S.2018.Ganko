@@ -47,7 +47,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BubbleSorterTests.cs" />
+    <Compile Include="BubbleSorterWithDelegateTests.cs" />
+    <Compile Include="BubbleSorterWithInterfaceTests.cs" />
     <Compile Include="JaggedArrayByMaxAscendingSorter.cs" />
     <Compile Include="JaggedArrayByMaxDescendingSorter.cs" />
     <Compile Include="JaggedArrayByMinDescendingSorter.cs" />

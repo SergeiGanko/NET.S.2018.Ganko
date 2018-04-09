@@ -22,19 +22,6 @@ namespace WorkingWithJaggedArray.Tests
                 return -1;
             }
 
-            //int firstArraySum = ArrayHelper.GetSum(firstArray);
-            //int secondArraySum = ArrayHelper.GetSum(secondArray);
-
-            //if (firstArraySum > secondArraySum)
-            //{
-            //    return 1;
-            //}
-
-            //if (firstArraySum < secondArraySum)
-            //{
-            //    return -1;
-            //}
-
             return secondArray.Sum().CompareTo(firstArray.Sum());
         }
     }

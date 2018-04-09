@@ -1,11 +1,12 @@
 ﻿using NUnit.Framework;
 using System;
-using static WorkingWithJaggedArray.BubbleSorter;
+using static WorkingWithJaggedArray.BubbleSorterWithInterfaceImplementation;
+using System.Collections.Generic;
 
 namespace WorkingWithJaggedArray.Tests
 {
     [TestFixture]
-    public class BubbleSorterTests
+    public class BubbleSorterWithInterfaceTests
     {
         [Test]
         public void Sort_BySumAscending()
@@ -172,15 +173,17 @@ namespace WorkingWithJaggedArray.Tests
         [Test]
         public void Sort_PassNullInsteadArray_ExpectArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => Sort(null, null));
+            IComparer<int[]> comparer = null;
+            Assert.Throws<ArgumentNullException>(() => Sort(null, comparer));
         }
 
         [Test]
         public void Sort_PassNullEnsteadComparer_ExpectArgumentNullException()
         {
             var testArray = new int[][] { new[] { 1, 2 }, new[] { 5, 6 } };
+            IComparer<int[]> comparer = null;
 
-            Assert.Throws<ArgumentNullException>(() => Sort(testArray, null));
+            Assert.Throws<ArgumentNullException>(() => Sort(testArray, comparer));
         }
     }
 }

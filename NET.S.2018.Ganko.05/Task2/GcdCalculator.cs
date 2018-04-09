@@ -5,7 +5,7 @@ namespace Task2
     /// <summary>
     /// Class encapsulates GCD calculation methods
     /// </summary>
-    public static class GcdCalculator
+    public class GcdCalculator
     {
         #region FindGcdByEuclid
 
