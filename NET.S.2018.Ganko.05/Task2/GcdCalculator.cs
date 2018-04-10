@@ -5,7 +5,7 @@ namespace Task2
     /// <summary>
     /// Class encapsulates GCD calculation methods
     /// </summary>
-    public class GcdCalculator
+    public static class GcdCalculator
     {
         #region FindGcdByEuclid
 
@@ -66,7 +66,8 @@ namespace Task2
         /// <returns>Returns GCD of three numbers</returns>
         public static int FindGcdByEuclid(int firstNumber, int secondNumber, int thirdNumber)
         {
-            return FindGcdByEuclid(FindGcdByEuclid(firstNumber, secondNumber), thirdNumber);
+            Func<int, int, int> gcdFunc = FindGcdByEuclid;
+            return FindGcd(gcdFunc, firstNumber, secondNumber, thirdNumber);
         }
 
         /// <summary>
@@ -79,9 +80,8 @@ namespace Task2
         /// <returns>Returns GCD of four numbers</returns>
         public static int FindGcdByEuclid(int firstNumber, int secondNumber, int thirdNumber, int fourthNumber)
         {
-            int gcdOfFirstAndSecond = FindGcdByEuclid(firstNumber, secondNumber);
-            int gcdOfThirdAndFourth = FindGcdByEuclid(thirdNumber, fourthNumber);
-            return FindGcdByEuclid(gcdOfFirstAndSecond, gcdOfThirdAndFourth);
+            Func<int, int, int> gcdFunc = FindGcdByEuclid;
+            return FindGcd(gcdFunc, firstNumber, secondNumber, thirdNumber, fourthNumber);
         }
 
         /// <summary>
@@ -91,14 +91,8 @@ namespace Task2
         /// <returns>Returns GCD of numbers</returns>
         public static int FindGcdByEuclid(params int[] numbers)
         {
-            int gcd = numbers[0];
-
-            for (int i = 1; i < numbers.Length; i++)
-            {
-                gcd = FindGcdByEuclid(gcd, numbers[i]);
-            }
-
-            return gcd;
+            Func<int, int, int> gcdFunc = FindGcdByEuclid;
+            return FindGcd(gcdFunc, numbers);
         }
 
         #endregion
@@ -179,7 +173,8 @@ namespace Task2
         /// <returns>Returns GCD of three numbers</returns>
         public static int FindGcdByStein(int firstNumber, int secondNumber, int thirdNumber)
         {
-            return FindGcdByStein(FindGcdByStein(firstNumber, secondNumber), thirdNumber);
+            Func<int, int, int> gcdFunc = FindGcdByStein;
+            return FindGcd(gcdFunc, firstNumber, secondNumber, thirdNumber);
         }
 
         /// <summary>
@@ -192,7 +187,8 @@ namespace Task2
         /// <returns>Returns GCD of four numbers</returns>
         public static int FindGcdByStein(int firstNumber, int secondNumber, int thirdNumber, int fourthNumber)
         {
-            return FindGcdByStein(FindGcdByStein(firstNumber, secondNumber), FindGcdByStein(thirdNumber, fourthNumber));
+            Func<int, int, int> gcdFunc = FindGcdByStein;
+            return FindGcd(gcdFunc, firstNumber, secondNumber, thirdNumber, fourthNumber);
         }
 
         /// <summary>
@@ -202,14 +198,8 @@ namespace Task2
         /// <returns>Returns GCD of numbers</returns>
         public static int FindGcdByStein(params int[] numbers)
         {
-            int gcd = numbers[0];
-
-            for (int i = 0; i < numbers.Length; i++)
-            {
-                gcd = FindGcdByStein(gcd, numbers[i]);
-            }
-
-            return gcd;
+            Func<int, int, int> gcdFunc = FindGcdByStein;
+            return FindGcd(gcdFunc, numbers);
         }
 
         #endregion
@@ -226,6 +216,30 @@ namespace Task2
             int temp = secondNumber;
             secondNumber = firstNumber;
             firstNumber = temp;
+        }
+
+        /// <summary>
+        /// Finds the GCD.
+        /// </summary>
+        /// <param name="gcdFunc">The GCD function.</param>
+        /// <param name="numbers">The numbers.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">Throws when numbers is null</exception>
+        private static int FindGcd(Func<int, int, int> gcdFunc, params int[] numbers)
+        {
+            if (numbers == null)
+            {
+                throw new ArgumentNullException($"Argument {nameof(numbers)} is null");
+            }
+
+            int result = numbers[0];
+
+            foreach (var number in numbers)
+            {
+                result = gcdFunc(result, number);
+            }
+
+            return result;
         }
 
         #endregion
