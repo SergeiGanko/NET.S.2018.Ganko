@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookFormattingExtension", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BooksAppCUI", "BooksAppCUI\BooksAppCUI.csproj", "{3124631A-42AD-4033-A88F-516739A8087A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Books.Tests", "Books.Tests\Books.Tests.csproj", "{00F22CB6-F309-4B33-9E0A-5D9BEDC2FA47}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{3124631A-42AD-4033-A88F-516739A8087A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3124631A-42AD-4033-A88F-516739A8087A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3124631A-42AD-4033-A88F-516739A8087A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00F22CB6-F309-4B33-9E0A-5D9BEDC2FA47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00F22CB6-F309-4B33-9E0A-5D9BEDC2FA47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00F22CB6-F309-4B33-9E0A-5D9BEDC2FA47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00F22CB6-F309-4B33-9E0A-5D9BEDC2FA47}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

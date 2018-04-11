@@ -29,7 +29,7 @@ namespace BookFormattingExtension
 
         public string Format(string format, object arg, IFormatProvider formatProvider)
         {
-            if (arg.GetType() != typeof(string))
+            if (arg.GetType() != typeof(Book))
             {
                 try
                 {
@@ -59,7 +59,7 @@ namespace BookFormattingExtension
             {
                 case "TP":
                     {
-                        return $"{book.Title} - {book.Price.ToString("C", formatProvider)}";
+                        return $"{book.Title}, {book.Price.ToString("C", formatProvider)}";
                     }
 
                 default:
