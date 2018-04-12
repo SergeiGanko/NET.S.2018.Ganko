@@ -12,6 +12,7 @@ namespace Fibonacci.Tests
         {
             get
             {
+                yield return new TestCaseData(1).Returns(new long[] { 1 });
                 yield return new TestCaseData(7).Returns(new long[] { 1, 1, 2, 3, 5, 8, 13 });
                 yield return new TestCaseData(5).Returns(new long[] { 1, 1, 2, 3, 5 });
                 yield return new TestCaseData(15).Returns(new long[] { 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610 });

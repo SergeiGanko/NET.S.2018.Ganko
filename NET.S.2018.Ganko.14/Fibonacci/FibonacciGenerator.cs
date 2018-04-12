@@ -27,6 +27,7 @@ namespace Fibonacci
             if (length == 1)
             {
                 yield return first;
+                yield break;
             }
 
             yield return first;
