@@ -1,6 +1,6 @@
 ﻿namespace BasicCoding.NUnitTests
 {
-    public class NegativeNumber : IPredicate
+    public class NegativeNumber : IPredicate<int>
     {
         public bool IsMatch(int number)
         {

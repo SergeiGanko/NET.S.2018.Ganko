@@ -1,6 +1,6 @@
 ﻿namespace BasicCoding.NUnitTests
 {
-    public class EvenNumber : IPredicate
+    public class EvenNumber : IPredicate<int>
     {
         public bool IsMatch(int number)
         {

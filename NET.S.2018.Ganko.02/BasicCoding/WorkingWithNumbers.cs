@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace BasicCoding
 {
-    using System.Diagnostics;
-
     /// <summary>
     /// WorkingWithNumbers class
     /// </summary>
@@ -20,7 +19,25 @@ namespace BasicCoding
         /// <returns>Returns filtered array</returns>
         /// <exception cref="ArgumentNullException">Throws when input is null</exception>
         /// <exception cref="ArgumentException">Throws when input is empty</exception>
-        public static int[] FilterDigit(int[] input, IPredicate predicate)
+        public static IEnumerable<T> Filter<T>(this T[] input, IPredicate<T> predicate)
+        {
+            return Filter(input, predicate.IsMatch);
+        }
+
+        public static IEnumerable<T> Filter<T>(this T[] input, Predicate<T> predicate)
+        {
+            CheckInput(input);
+
+            foreach (var item in input)
+            {
+                if (predicate(item))
+                {
+                    yield return item;
+                }
+            }
+        }
+
+        private static void CheckInput<T>(T[] input)
         {
             if (input == null)
             {
@@ -31,18 +48,6 @@ namespace BasicCoding
             {
                 throw new ArgumentException($"{nameof(input)} is empty");
             }
-
-            var temp = new List<int>();
-
-            foreach (var item in input)
-            {
-                if (predicate.IsMatch(item))
-                {
-                    temp.Add(item);
-                }
-            }
-
-            return temp.ToArray();
         }
 
         #endregion

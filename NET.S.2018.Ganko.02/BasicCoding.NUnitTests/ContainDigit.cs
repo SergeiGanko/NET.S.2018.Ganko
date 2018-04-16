@@ -2,7 +2,7 @@
 
 namespace BasicCoding.NUnitTests
 {
-    public class ContainDigit : IPredicate
+    public class ContainDigit : IPredicate<int>
     {
         public ContainDigit(int digit)
         {

@@ -1,7 +1,7 @@
 ﻿namespace BasicCoding
 {
-    public interface IPredicate
+    public interface IPredicate<in T>
     {
-        bool IsMatch(int number);
+        bool IsMatch(T item);
     }
 }

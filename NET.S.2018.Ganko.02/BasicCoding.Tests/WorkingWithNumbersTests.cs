@@ -2,6 +2,8 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using static BasicCoding.WorkingWithNumbers;
+using BasicCoding.NUnitTests;
+using System.Linq;
 
 namespace BasicCoding.Tests
 {
@@ -38,10 +40,10 @@ namespace BasicCoding.Tests
             InitializeActualResultArrayAndExpectResultArray(n, digit, int.MinValue, int.MaxValue);
 
             // Act
-            var actualResultArray = FilterDigit(inputArray, digit);
+            var actualResultArray = inputArray.Filter(new ContainDigit(3));
 
             // Assert
-            CollectionAssert.AreEqual(expectResultArray, actualResultArray);
+            CollectionAssert.AreEqual(expectResultArray, actualResultArray.ToArray());
         }
 
         [TestMethod]
@@ -53,10 +55,10 @@ namespace BasicCoding.Tests
             InitializeActualResultArrayAndExpectResultArray(n, digit, 0, int.MaxValue);
 
             // Act
-            var actualResultArray = FilterDigit(inputArray, digit);
+            var actualResultArray = inputArray.Filter(new ContainDigit(3));
 
             // Assert
-            CollectionAssert.AreEqual(expectResultArray, actualResultArray);
+            CollectionAssert.AreEqual(expectResultArray, actualResultArray.ToArray());
         }
 
         [TestMethod]
@@ -68,26 +70,19 @@ namespace BasicCoding.Tests
             InitializeActualResultArrayAndExpectResultArray(n, digit, int.MinValue, 0);
 
             // Act
-            var actualResultArray = FilterDigit(inputArray, digit);
+            var actualResultArray = inputArray.Filter(new ContainDigit(3));
 
             // Assert
-            CollectionAssert.AreEqual(expectResultArray, actualResultArray);
+            CollectionAssert.AreEqual(expectResultArray, actualResultArray.ToArray());
         }
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void FilterDigit_PassesNullAsArgument_ExpectsArgumentNullException()
-            => FilterDigit(null, 3);
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void FilterDigit_PassesEmptyArray_ExpectsArgumentException()
-            => FilterDigit(new int[0], 3);
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void FilterDigit_PassesArrayAndInvalidDigit_ExpectsArgumentOutOfRangeException()
-            => FilterDigit(new[] { 51, 34, 173, 2, 69, 16, 3, 4 }, 12);
+        {
+            inputArray = new[] { 51, 34, 173, 2, 69, 16, 3, 4 };
+            inputArray.Filter(new ContainDigit(12));
+        }
 
         #endregion
 

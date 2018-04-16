@@ -56,6 +56,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BasicCoding.NUnitTests\BasicCoding.NUnitTests.csproj">
+      <Project>{23F86ED4-AFE7-4148-A749-9BF7B2513293}</Project>
+      <Name>BasicCoding.NUnitTests</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BasicCoding\BasicCoding.csproj">
       <Project>{19bfa117-4b33-443a-9ca8-0a7dc4daad33}</Project>
       <Name>BasicCoding</Name>
