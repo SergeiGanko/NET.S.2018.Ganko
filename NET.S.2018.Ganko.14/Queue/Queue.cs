@@ -12,6 +12,8 @@ namespace Queue
     /// <seealso cref="System.Collections.Generic.IEnumerable{T}" />
     public sealed class Queue<T> : IEnumerable<T>
     {
+        #region Constants
+
         /// <summary>
         /// The default capasity of the queue
         /// </summary>
@@ -21,6 +23,10 @@ namespace Queue
         /// The value of array size increasing
         /// </summary>
         private const int increaseCapasity = 10;
+
+        #endregion
+
+        #region Fields
 
         /// <summary>
         /// The array
@@ -43,11 +49,24 @@ namespace Queue
         private int count;
 
         /// <summary>
+        /// The version
+        /// </summary>
+        private int version;
+
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="Queue{T}"/> class.
         /// </summary>
         public Queue()
         {
             array = new T[defaultCapasity];
+            head = 0;
+            tail = 0;
+            count = 0;
+            version = 0;
         }
 
         /// <summary>
@@ -63,6 +82,10 @@ namespace Queue
             }
 
             array = new T[capasity];
+            head = 0;
+            tail = 0;
+            count = 0;
+            version = 0;
         }
 
         /// <summary>
@@ -79,12 +102,19 @@ namespace Queue
 
             array = new T[collection.Count()];
             count = array.Length;
+            head = 0;
+            count = 0;
+            version = 0;
 
             foreach (var item in collection)
             {
                 Enqueue(item);
             }
         }
+
+        #endregion
+
+        #region Properties
 
         /// <summary>
         /// Gets the queue count.
@@ -97,7 +127,12 @@ namespace Queue
         /// <value>
         ///   <c>true</c> if this queue is empty; otherwise, <c>false</c>.
         /// </value>
-        public bool IsEmpty => count == 0;
+        public bool IsEmpty => this.count == 0;
+
+
+        #endregion
+
+        #region Public Methods
 
         /// <summary>
         /// Adds item to the tail of queue.
@@ -132,6 +167,7 @@ namespace Queue
             array[tail] = item;
             tail = (tail + 1) % array.Length;
             count++;
+            version++;
         }
 
         /// <summary>
@@ -150,6 +186,7 @@ namespace Queue
             array[head] = default(T);
             head = (head + 1) % array.Length;
             count--;
+            version++;
             return item;
         }
 
@@ -186,26 +223,134 @@ namespace Queue
             head = 0;
             tail = 0;
             count = 0;
-        }
-
-        #region IEnumerable<T> Members
-
-        // TODO: Implement iterator whithout yield
-        public IEnumerator<T> GetEnumerator()
-        {
-            foreach (var item in this.array)
-            {
-                yield return item;
-            }
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return this.GetEnumerator();
+            version++;
         }
 
         #endregion
 
+        #region IEnumerable<T> Members
 
+        /// <summary>
+        /// Returns an enumerator that iterates through the collection.
+        /// </summary>
+        /// <returns>
+        /// An enumerator that can be used to iterate through the collection.
+        /// </returns>
+        public IEnumerator<T> GetEnumerator() => new Enumerator(this);
+
+        /// <summary>
+        /// Returns an enumerator that iterates through a collection.
+        /// </summary>
+        /// <returns>
+        /// An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
+        /// </returns>
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        /// <summary>
+        /// Class Enumerator
+        /// </summary>
+        /// <seealso cref="System.Collections.Generic.IEnumerable{T}" />
+        private class Enumerator : IEnumerator<T>
+        {
+            #region Fields
+
+            /// <summary>
+            /// The queue
+            /// </summary>
+            private readonly Queue<T> queue;
+
+            /// <summary>
+            /// The version
+            /// </summary>
+            private readonly int version;
+
+            /// <summary>
+            /// The index of the queue
+            /// </summary>
+            private int index;
+
+            /// <summary>
+            /// The current element of queue
+            /// </summary>
+            private T currentElement;
+
+            #endregion
+
+            #region Constructors
+
+            /// <summary>
+            /// Initializes a new instance of the <see cref="Enumerator"/> class.
+            /// </summary>
+            /// <param name="queue">The queue.</param>
+            public Enumerator(Queue<T> queue)
+            {
+                this.queue = queue;
+                version = queue.version;
+                index = -1;
+                currentElement = default(T);
+            }
+
+            #endregion
+
+            #region Properties
+
+            public T Current
+            {
+                get
+                {
+                    if (this.index == -1)
+                    {
+                        throw new InvalidOperationException($"Iteration was ended");
+                    }
+
+                    return currentElement;
+                }
+            }
+
+            object IEnumerator.Current => this.Current;
+
+            #endregion
+
+            #region Public Methods
+
+            public bool MoveNext()
+            {
+                if (this.version != this.queue.version)
+                {
+                    throw new InvalidOperationException("Queue was changed");
+                }
+
+                if (index == -2)
+                {
+                    return false;
+                }
+
+                index++;
+
+                if (index == queue.count)
+                {
+                    index = -2;
+                    currentElement = default(T);
+                    return false;
+                }
+
+                currentElement = queue.array[index];
+                return true;
+            }
+
+            public void Reset() => index = -1;
+
+            #endregion
+
+            #region IDisposable implementation
+
+            void IDisposable.Dispose()
+            {
+            }
+
+            #endregion
+        }
+
+        #endregion
     }
 }

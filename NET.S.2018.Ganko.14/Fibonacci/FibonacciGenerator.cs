@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Numerics;
 
 namespace Fibonacci
 {
@@ -14,15 +15,25 @@ namespace Fibonacci
         /// <param name="length">The length.</param>
         /// <returns>Returns Fibonacci sequence</returns>
         /// <exception cref="System.ArgumentException">Throws when the length less than zero</exception>
-        public static IEnumerable<long> Generate(int length)
+        public static IEnumerable<BigInteger> Generate(int length)
         {
             if (length < 0)
             {
                 throw new ArgumentException($"Argument {nameof(length)} must be greater the zero");
             }
 
-            long first = 1;
-            long second = 1;
+            return Generator(length);
+        }
+
+        /// <summary>
+        /// Generates the Fibonacci sequence.
+        /// </summary>
+        /// <param name="length">The length.</param>
+        /// <returns>Returns Fibonacci sequence</returns>
+        private static IEnumerable<BigInteger> Generator(int length)
+        {
+            BigInteger first = 1;
+            BigInteger second = 1;
 
             if (length == 1)
             {
@@ -37,13 +48,12 @@ namespace Fibonacci
 
             while (i < length)
             {
-                long number = first + second;
+                BigInteger number = first + second;
                 yield return number = first + second;
                 first = second;
                 second = number;
                 i++;
             }
-
         }
     }
 }
