@@ -75,15 +75,26 @@ namespace SearchAlgorithm
         /// <summary>
         /// Initializes a new instance of the <see cref="BinarySearchTree{T}"/> class.
         /// </summary>
+        /// <param name="collection">The collection.</param>
+        public BinarySearchTree(IEnumerable<T> collection) : this()
+        {
+            CheckInput(collection);
+
+            foreach (var item in collection)
+            {
+                Add(item);
+            }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BinarySearchTree{T}"/> class.
+        /// </summary>
         /// <param name="collection">The collection of elements</param>
         /// <param name="comparison">The comparison of two objects of the same type</param>
         /// <exception cref="ArgumentNullException">Throws when collection is null</exception>
         public BinarySearchTree(IEnumerable<T> collection, Comparison<T> comparison = null) : this(comparison)
         {
-            if (ReferenceEquals(collection, null))
-            {
-                throw new ArgumentNullException($"Argument {nameof(collection)} is null");
-            }
+            CheckInput(collection);
 
             foreach (var item in collection)
             {
@@ -99,10 +110,7 @@ namespace SearchAlgorithm
         /// <exception cref="ArgumentNullException">Throws when collection is null</exception>
         public BinarySearchTree(IEnumerable<T> collection, IComparer<T> comparer = null) : this(comparer)
         {
-            if (ReferenceEquals(collection, null))
-            {
-                throw new ArgumentNullException($"Argument {nameof(collection)} is null");
-            }
+            CheckInput(collection);
 
             foreach (var item in collection)
             {
@@ -157,10 +165,7 @@ namespace SearchAlgorithm
         /// <exception cref="ArgumentNullException">Throws when item is null</exception>
         public void Add(T item)
         {
-            if (ReferenceEquals(item, null))
-            {
-                throw new ArgumentNullException($"Argument {nameof(item)} is null");
-            }
+            CheckInput(item);
 
             if (root == null)
             {
@@ -174,15 +179,110 @@ namespace SearchAlgorithm
             count++;
         }
 
-        public bool Remove(T item)
-        {
-            // TODO ...
-            count--;
-        }
-
+        /// <summary>
+        /// Determines whether binary tree contains the specified node.
+        /// </summary>
+        /// <param name="item">The node.</param>
+        /// <returns>
+        ///   <c>true</c> if contains the specified node; otherwise, <c>false</c>.
+        /// </returns>
         public bool Contains(T item)
         {
-            // TODO ...
+            CheckInput(item);
+
+            var (current, parent) = Find(item);
+            return current != null;
+        }
+
+        /// <summary>
+        /// Removes the specified node.
+        /// </summary>
+        /// <param name="item">The node to be deleted.</param>
+        /// <returns>True if node successfully deleted</returns>
+        public bool Remove(T item)
+        {
+            CheckInput(item);
+
+            var (current, parent) = Find(item);
+
+            if (current is null)
+            {
+                return false;
+            }
+
+            //  The node to be deleted has no children
+            if (current.Left == null && current.Right == null)
+            {
+                if (current == this.root)
+                {
+                    this.root = null;
+                }
+                else if (parent.Left == current)
+                {
+                    parent.Left = null;
+                }
+                else
+                {
+                    parent.Right = null;
+                }
+            }
+            // The node to be deleted has one child
+            else if (current.Right == null) // if no right child, replace with left subtree
+            {
+                if (current == this.root)
+                {
+                    this.root = current.Left;
+                }
+                else if (parent.Left == current)
+                {
+                    parent.Left = current.Left;
+                }
+                else
+                {
+                    parent.Right = current.Left;
+                }
+            }
+            else if (current.Left == null) // if no left child, replace with right subtree
+            {
+                if (current == this.root)
+                {
+                    this.root = current.Right;
+                }
+                else if (parent.Left == current)
+                {
+                    parent.Left = current.Right;
+                }
+                else
+                {
+                    parent.Right = current.Right;
+                }
+            }
+            // The node to be deleted has two children
+            else
+            {
+                // get successor of node to delete current
+                Node<T> successor = GetSuccessor(current);
+
+                // connect parent of current to successor instead
+                if (current == this.root)
+                {
+                    this.root = successor;
+                }
+                else if (parent.Left == current)
+                {
+                    parent.Left = successor;
+                }
+                else
+                {
+                    parent.Right = successor;
+                }
+
+                successor.Left = current.Left;
+            }
+
+            count--;
+
+            return true;
         }
 
         /// <summary>
@@ -301,6 +401,8 @@ namespace SearchAlgorithm
                     yield return item;
                 }
             }
+
+            yield return root.Value;
         }
 
         /// <summary>
@@ -310,7 +412,7 @@ namespace SearchAlgorithm
         /// <param name="item">The item.</param>
         private void AddItem(Node<T> node, T item)
         {
-            if (comparer.Compare(item, node.Value) < 0)
+            if (comparer.Compare(node.Value, item) > 0)
             {
                 if (ReferenceEquals(node.Left, null))
                 {
@@ -332,6 +434,79 @@ namespace SearchAlgorithm
                     AddItem(node.Right, item);
                 }
             }
+        }
+
+        /// <summary>
+        /// Checks the input.
+        /// </summary>
+        /// <typeparam name="T">Any Type</typeparam>
+        /// <param name="obj">The object.</param>
+        /// <exception cref="ArgumentNullException">Throws when obj is null</exception>
+        private static void CheckInput<T>(T obj)
+        {
+            if (ReferenceEquals(obj, null))
+            {
+                throw new ArgumentNullException($"Argument {nameof(obj)} is null");
+            }
+        }
+
+        /// <summary>
+        /// Finds the specified node.
+        /// </summary>
+        /// <param name="item">The node with specified value.</param>
+        /// <returns>Returns the tuple of nodes</returns>
+        private (Node<T> current, Node<T> parent) Find(T item)
+        {
+            CheckInput(item);
+
+            Node<T> current = this.root;
+            Node<T> parent = null;
+
+            while (current != null)
+            {
+                if (comparer.Compare(item, current.Value) < 0)
+                {
+                    parent = current;
+                    current = current.Left;
+                }
+                else if (comparer.Compare(item, current.Value) > 0)
+                {
+                    parent = current;
+                    current = current.Right;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return (current, parent);
+        }
+
+        /// <summary>
+        /// Gets the successor.
+        /// </summary>
+        /// <param name="delNode">The delete node.</param>
+        /// <returns> returns node with next-highest value after delNode goes to right child, then right child’s left descendants</returns>
+        private static Node<T> GetSuccessor(Node<T> delNode)
+        {
+            Node<T> successorParent = delNode;
+            Node<T> successor = delNode;
+            Node<T> current = delNode.Right;
+
+            while (current != null)
+            {
+                successorParent = successor;
+                current = current.Left;
+            }
+
+            if (successor != delNode.Right)
+            {
+                successorParent.Left = successor.Right;
+                successor.Right = delNode.Right;
+            }
+
+            return successor;
         }
 
         #endregion
