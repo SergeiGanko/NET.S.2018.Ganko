@@ -13,13 +13,12 @@ namespace BasicCoding
         #region Filter methods
 
         /// <summary>
-        /// Filters the digit.
+        /// Filters the sequence depending on predicate.
         /// </summary>
-        /// <param name="input">The input array</param>
-        /// <param name="predicate">The predicate.</param>
-        /// <returns>Returns filtered array</returns>
-        /// <exception cref="ArgumentNullException">Throws when input is null</exception>
-        /// <exception cref="ArgumentException">Throws when input is empty</exception>
+        /// <typeparam name="T">Any type</typeparam>
+        /// <param name="input">The input.</param>
+        /// <param name="predicate">The predicate which determines filtration</param>
+        /// <returns>Returns filtered sequence</returns>
         public static IEnumerable<T> Filter<T>(this IEnumerable<T> input, IPredicate<T> predicate)
         {
             CheckInput(input, predicate);
@@ -27,6 +26,13 @@ namespace BasicCoding
             return Filter(input, predicate.IsMatch);
         }
 
+        /// <summary>
+        /// Filters the sequence depending on predicate.
+        /// </summary>
+        /// <typeparam name="T">Any type</typeparam>
+        /// <param name="input">The input.</param>
+        /// <param name="predicate">The predicate which determines filtration</param>
+        /// <returns>Returns filtered sequence</returns>
         public static IEnumerable<T> Filter<T>(this IEnumerable<T> input, Func<T, bool> predicate)
         {
             CheckInput(input, predicate);
@@ -42,6 +48,14 @@ namespace BasicCoding
 
         #region Input validation
 
+        /// <summary>
+        /// Checks the input.
+        /// </summary>
+        /// <typeparam name="T">Any type</typeparam>
+        /// <param name="input">The input sequence</param>
+        /// <param name="predicate">The predicate which determines filtration</param>
+        /// <exception cref="ArgumentNullException">Throws when input or predicate is null</exception>
+        /// <exception cref="ArgumentException">Throws when input is empty sequence</exception>
         private static void CheckInput<T>(IEnumerable<T> input, IPredicate<T> predicate)
         {
             if (input == null)
@@ -60,6 +74,14 @@ namespace BasicCoding
             }
         }
 
+        /// <summary>
+        /// Checks the input.
+        /// </summary>
+        /// <typeparam name="T">Any type</typeparam>
+        /// <param name="input">The input sequence</param>
+        /// <param name="predicate">The predicate which determines filtration</param>
+        /// <exception cref="ArgumentNullException">Throws when input or predicate is null</exception>
+        /// <exception cref="ArgumentException">Throws when input is empty sequence</exception>
         private static void CheckInput<T>(IEnumerable<T> input, Func<T, bool> predicate)
         {
             if (input == null)
