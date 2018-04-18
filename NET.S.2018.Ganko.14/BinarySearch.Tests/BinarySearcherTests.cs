@@ -13,31 +13,31 @@ namespace BinarySearch.Tests
         [TestCaseSource(nameof(IntArrarBinarySearchInterfaceTestData))]
         public int BinarySearch_Int_Comparer(int[] array, int item, IComparer<int> comparer)
         {
-            return BinarySearcher.BinarySearch(array, item, comparer);
+            return array.BinarySearch(item, comparer);
         }
         
         [TestCaseSource(nameof(IntArrayBinarySearchDelegateTestData))]
         public int BinarySearch_Int_Comparison(int[] array, int item, Comparison<int> comparison)
         {
-            return BinarySearcher.BinarySearch(array, item, comparison);
+            return array.BinarySearch(item, comparison);
         }
 
         [TestCaseSource(nameof(StringArrayBinarySearchInterfaceTestData))]
         public int BinarySearch_String_Comparer(string[] array, string item, IComparer<string> comparer)
         {
-            return BinarySearcher.BinarySearch(array, item, comparer);
+            return array.BinarySearch(item, comparer);
         }
 
         [TestCaseSource(nameof(StringArrayBinarySearchDelegateTestData))]
         public int BinarySearch_String_Comparison(string[] array, string item, Comparison<string> comparison)
         {
-            return BinarySearcher.BinarySearch(array, item, comparison);
+            return array.BinarySearch(item, comparison);
         }
         
         [TestCase(null, 3, null)]
         public void BinarySearch_ExpectsArgumentNullException(int[] array, int item, Comparison<int> comparison)
         {
-            Assert.Throws<ArgumentNullException>(() => BinarySearcher.BinarySearch(array, item, comparison));
+            Assert.Throws<ArgumentNullException>(() => array.BinarySearch(item, comparison));
         }
 
         #endregion

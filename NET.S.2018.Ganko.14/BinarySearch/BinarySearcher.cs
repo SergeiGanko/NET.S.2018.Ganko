@@ -1,24 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BinarySearch
 {
     /// <summary>
     /// BinarySearcher Class
     /// </summary>
-    public sealed class BinarySearcher
+    public static class BinarySearcher
     {
         /// <summary>
         /// Searches the entire sorted array for an element 'item' using the comparer.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="array">The array.</param>
+        /// <param name="collection">The array.</param>
         /// <param name="item">The item.</param>
         /// <param name="comparer">The comparer.</param>
         /// <returns>Returns the index of the element</returns>
-        public static int BinarySearch<T>(T[] array, T item, IComparer<T> comparer)
+        public static int BinarySearch<T>(this IEnumerable<T> collection, T item, IComparer<T> comparer)
         {
-            return BinarySearch(array, item, comparer.Compare);
+            CheckInput(collection, item);
+
+            return BinarySearch(collection, item, comparer.Compare);
         }
 
         /// <summary>
@@ -30,15 +33,15 @@ namespace BinarySearch
         /// <param name="comparison">The comparison.</param>
         /// <returns>Returns the index of the element</returns>
         /// <exception cref="System.InvalidOperationException">Throws when two objects can't be compared</exception>
-        public static int BinarySearch<T>(T[] array, T item, Comparison<T> comparison)
+        public static int BinarySearch<T>(this IEnumerable<T> collection, T item, Comparison<T> comparison)
         {
-            CheckInput(array, item);
+            CheckInput(collection, item);
 
             if (comparison == null)
             {
                 if (item is IComparable<T> element)
                 {
-                    comparison = (T first, T second) => element.CompareTo(second);
+                    comparison = (first, second) => element.CompareTo(second);
                 }
                 else
                 {
@@ -47,13 +50,13 @@ namespace BinarySearch
             }
 
             int left = 0;
-            int right = array.Length;
+            int right = collection.Count();
 
             while (left < right)
             {
                 int mid = left + (right - left) / 2;
 
-                if (comparison(item, array[mid]) <= 0)
+                if (comparison(item, collection.ElementAt(mid)) <= 0)
                 {
                     right = mid;
                 }
@@ -63,7 +66,7 @@ namespace BinarySearch
                 }
             }
 
-            if (comparison(item, array[left]) == 0)
+            if (comparison(item, collection.ElementAt(left)) == 0)
             {
                 return left;
             }
@@ -74,16 +77,16 @@ namespace BinarySearch
         /// <summary>
         /// Checks the input.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T">Any type</typeparam>
         /// <param name="array">The array.</param>
         /// <param name="item">The item.</param>
         /// <exception cref="System.ArgumentNullException">Throws when array or item is null
         /// </exception>
-        private static void CheckInput<T>(T[] array, T item)
+        private static void CheckInput<T>(IEnumerable<T> collection, T item)
         {
-            if (array == null)
+            if (collection == null)
             {
-                throw new ArgumentNullException($"Argument {nameof(array)} is null");
+                throw new ArgumentNullException($"Argument {nameof(collection)} is null");
             }
 
             if (item == null)

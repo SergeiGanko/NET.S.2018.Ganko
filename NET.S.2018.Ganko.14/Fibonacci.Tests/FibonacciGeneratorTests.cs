@@ -25,13 +25,13 @@ namespace Fibonacci.Tests
         [TestCaseSource(nameof(FibonacciSequanceTestCases))]
         public IEnumerable<BigInteger> Generate_Passes9_ExpectsArray(int length)
         {
-            return Generate(length);
+            return GenerateFibonacci(length);
         }
 
         [TestCase(-1)]
         public void Generate_PassesMinus1_ExpectsArgumentException(int length)
         {
-            Assert.Throws<ArgumentException>(() => Generate(length));
+            Assert.Throws<ArgumentException>(() => GenerateFibonacci(length));
         }
     }
 }

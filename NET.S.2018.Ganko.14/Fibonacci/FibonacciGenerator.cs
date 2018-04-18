@@ -13,27 +13,27 @@ namespace Fibonacci
         /// Generates the Fibonacci sequence.
         /// </summary>
         /// <param name="length">The length.</param>
-        /// <returns>Returns Fibonacci sequence</returns>
+        /// <returns>Returns Fibonacci sequence until length</returns>
         /// <exception cref="System.ArgumentException">Throws when the length less than zero</exception>
-        public static IEnumerable<BigInteger> Generate(int length)
+        public static IEnumerable<BigInteger> GenerateFibonacci(int length)
         {
             if (length < 0)
             {
                 throw new ArgumentException($"Argument {nameof(length)} must be greater the zero");
             }
 
-            return Generator(length);
+            return Generate(length);
         }
 
         /// <summary>
         /// Generates the Fibonacci sequence.
         /// </summary>
         /// <param name="length">The length.</param>
-        /// <returns>Returns Fibonacci sequence</returns>
-        private static IEnumerable<BigInteger> Generator(int length)
+        /// <returns>Returns Fibonacci sequence until length</returns>
+        private static IEnumerable<BigInteger> Generate(int length)
         {
-            BigInteger first = 1;
-            BigInteger second = 1;
+            BigInteger first = BigInteger.One;
+            BigInteger second = BigInteger.One;
 
             if (length == 1)
             {
@@ -48,8 +48,8 @@ namespace Fibonacci
 
             while (i < length)
             {
-                BigInteger number = first + second;
-                yield return number = first + second;
+                var number = first + second;
+                yield return number;
                 first = second;
                 second = number;
                 i++;
