@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace BasicCoding
 {
@@ -9,7 +10,7 @@ namespace BasicCoding
     /// </summary>
     public static class WorkingWithNumbers
     {
-        #region FilterDigit methods
+        #region Filter methods
 
         /// <summary>
         /// Filters the digit.
@@ -19,14 +20,16 @@ namespace BasicCoding
         /// <returns>Returns filtered array</returns>
         /// <exception cref="ArgumentNullException">Throws when input is null</exception>
         /// <exception cref="ArgumentException">Throws when input is empty</exception>
-        public static IEnumerable<T> Filter<T>(this T[] input, IPredicate<T> predicate)
+        public static IEnumerable<T> Filter<T>(this IEnumerable<T> input, IPredicate<T> predicate)
         {
+            CheckInput(input, predicate);
+
             return Filter(input, predicate.IsMatch);
         }
 
-        public static IEnumerable<T> Filter<T>(this T[] input, Predicate<T> predicate)
+        public static IEnumerable<T> Filter<T>(this IEnumerable<T> input, Func<T, bool> predicate)
         {
-            CheckInput(input);
+            CheckInput(input, predicate);
 
             foreach (var item in input)
             {
@@ -37,18 +40,45 @@ namespace BasicCoding
             }
         }
 
-        private static void CheckInput<T>(T[] input)
+        #region Input validation
+
+        private static void CheckInput<T>(IEnumerable<T> input, IPredicate<T> predicate)
         {
             if (input == null)
             {
-                throw new ArgumentNullException($"{nameof(input)} is null or empty");
+                throw new ArgumentNullException($"Argument {nameof(input)} is null");
             }
 
-            if (input.Length == 0)
+            if (!input.Any())
             {
-                throw new ArgumentException($"{nameof(input)} is empty");
+                throw new ArgumentException($"Collection {nameof(input)} is empty");
+            }
+
+            if (predicate == null)
+            {
+                throw new ArgumentNullException($"Argument {nameof(predicate)} is null");
             }
         }
+
+        private static void CheckInput<T>(IEnumerable<T> input, Func<T, bool> predicate)
+        {
+            if (input == null)
+            {
+                throw new ArgumentNullException($"Argument {nameof(input)} is null");
+            }
+
+            if (!input.Any())
+            {
+                throw new ArgumentException($"Collection {nameof(input)} is empty");
+            }
+
+            if (predicate == null)
+            {
+                throw new ArgumentNullException($"Argument {nameof(predicate)} is null");
+            }
+        }
+
+        #endregion
 
         #endregion
 
