@@ -1,12 +1,9 @@
 ﻿using NUnit.Framework;
 using SearchAlgorithm.Tests.Comparers;
+using System.Collections.Generic;
 
 namespace SearchAlgorithm.Tests
 {
-    using System;
-
-    using StringComparer = SearchAlgorithm.Tests.Comparers.StringComparer;
-
     [TestFixture]
     public class BinarySearchTreeTests
     {
@@ -59,14 +56,26 @@ namespace SearchAlgorithm.Tests
             Assert.False(tree.Contains(number));
         }
 
-        [TestCase(73)]
-        [TestCase(10)]
-        public void AddTest(int number)
+        [TestCase(73, ExpectedResult = new int[] { 9, 14, 23, 30, 39, 53, 61, 72, 73, 79, 84 })]
+        [TestCase(10, ExpectedResult = new int[] { 9, 10, 14, 23, 30, 39, 53, 61, 72, 79, 84 })]
+        public IEnumerable<int> AddTest(int number)
         {
             var tree = new BinarySearchTree<int>(testInts);
             tree.Add(number);
 
-            Assert.True(tree.Contains(number));
+            return tree.InOrderTraverse();
+        }
+
+        [TestCase(39, ExpectedResult = new int[] { 9, 14, 23, 30, 53, 61, 72, 79, 84 })]
+        [TestCase(84, ExpectedResult = new int[] { 9, 14, 23, 30, 39, 53, 61, 72, 79 })]
+        [TestCase(14, ExpectedResult = new int[] { 9, 23, 30, 39, 53, 61, 72, 79, 84 })]
+        [TestCase(53, ExpectedResult = new int[] { 9, 14, 23, 30, 39, 61, 72, 79, 84 })]
+        public IEnumerable<int> RemoveTest(int number)
+        {
+            var tree = new BinarySearchTree<int>(testInts);
+            tree.Remove(number);
+
+            return tree.InOrderTraverse();
         }
 
         [Test]
@@ -100,7 +109,7 @@ namespace SearchAlgorithm.Tests
         [Test]
         public void TraverseWithStringComparerTest()
         {
-            var tree = new BinarySearchTree<string>(testStrings, new StringComparer());
+            var tree = new BinarySearchTree<string>(testStrings, new Comparers.StringComparer());
             string[] expectedArrayInOrder = { "T", "S", "Q", "K", "F", "D", "B", "A" };
             string[] expectedArrayPreOrder = { "F", "S", "T", "K", "Q", "D", "A", "B" };
             string[] expectedArrayPostOrder = { "T", "Q", "K", "S", "B", "A", "D", "F" };

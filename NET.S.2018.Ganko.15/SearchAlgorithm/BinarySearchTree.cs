@@ -414,7 +414,7 @@ namespace SearchAlgorithm
         {
             if (comparer.Compare(node.Value, item) > 0)
             {
-                if (ReferenceEquals(node.Left, null))
+                if (node.Left == null)
                 {
                     node.Left = new Node<T>(item);
                 }
@@ -425,7 +425,7 @@ namespace SearchAlgorithm
             }
             else
             {
-                if (ReferenceEquals(node.Right, null))
+                if (node.Right == null)
                 {
                     node.Right = new Node<T>(item);
                 }
@@ -444,7 +444,7 @@ namespace SearchAlgorithm
         /// <exception cref="ArgumentNullException">Throws when obj is null</exception>
         private static void CheckInput<T>(T obj)
         {
-            if (ReferenceEquals(obj, null))
+            if (obj == null)
             {
                 throw new ArgumentNullException($"Argument {nameof(obj)} is null");
             }
@@ -488,7 +488,7 @@ namespace SearchAlgorithm
         /// </summary>
         /// <param name="delNode">The delete node.</param>
         /// <returns> returns node with next-highest value after delNode goes to right child, then right child’s left descendants</returns>
-        private static Node<T> GetSuccessor(Node<T> delNode)
+        private Node<T> GetSuccessor(Node<T> delNode)
         {
             Node<T> successorParent = delNode;
             Node<T> successor = delNode;
@@ -497,6 +497,7 @@ namespace SearchAlgorithm
             while (current != null)
             {
                 successorParent = successor;
+                successor = current;
                 current = current.Left;
             }
 
