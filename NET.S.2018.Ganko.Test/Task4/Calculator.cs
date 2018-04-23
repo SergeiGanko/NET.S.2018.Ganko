@@ -10,7 +10,7 @@ namespace Task4
         {
             if (values == null)
             {
-                throw  new ArgumentNullException(nameof(values));
+                throw new ArgumentNullException(nameof(values));
             }
 
             switch (averagingMethod)

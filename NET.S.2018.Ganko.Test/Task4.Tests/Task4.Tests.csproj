@@ -50,6 +50,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Task4.Solution\Task4.Solution.csproj">
+      <Project>{595B3681-B25B-405F-B968-D4438CDBCD72}</Project>
+      <Name>Task4.Solution</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Task4\Task4.csproj">
       <Project>{a67bc601-7d9f-43fe-8307-5b0472ea2085}</Project>
       <Name>Task4</Name>
