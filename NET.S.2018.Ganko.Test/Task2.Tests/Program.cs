@@ -11,7 +11,7 @@ namespace Task2.Tests
             var bytesGenerator = new RandomBytesFileGenerator();
             var charsgenerator = new RandomCharsFileGenerator();
             bytesGenerator.GenerateFiles(2, 10);
-            charsgenerator.GenerateFiles(2, 15);
+            charsgenerator.GenerateFiles(2, 10);
 
             var randomBytesFiles = Directory.GetFiles(bytesGenerator.WorkingDirectory, "*.bytes");
 
