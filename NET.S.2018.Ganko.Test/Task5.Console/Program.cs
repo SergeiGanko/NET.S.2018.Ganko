@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
     using System;
-    using Task5;
+    using Task5.Solution;
 
     class Program
     {
@@ -17,11 +17,11 @@
 
             Document document = new Document(parts);
 
-            Console.WriteLine(document.ToHtml());
+            Console.WriteLine(document.ConvertToHtml());
 
-            Console.WriteLine(document.ToPlainText());
+            Console.WriteLine(document.ConvertToPlainText());
 
-            Console.WriteLine(document.ToLaTeX());
+            Console.WriteLine(document.ConvertToLaTex());
         }
     }
 }
