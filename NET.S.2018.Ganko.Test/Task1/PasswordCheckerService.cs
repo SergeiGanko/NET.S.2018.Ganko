@@ -13,7 +13,7 @@ namespace Task1
                 throw new ArgumentException($"{password} is null arg");
 
             if (password == string.Empty)
-                return Tuple.Create(false, $"{password} is empty ");
+                return Tuple.Create(false, $"{password} is empty");
 
             // check if length more than 7 chars 
             if (password.Length <= 7)

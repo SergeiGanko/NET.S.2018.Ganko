@@ -1,15 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Task1.Solution;
 
 namespace Task1.Console
 {
-    class Program
+    using Console = System.Console;
+
+    internal sealed class Program
     {
-        static void Main(string[] args)
+        private static void Main()
         {
+            IPasswordValidator[] validators = {
+                new EmptinessValidator(),
+                new MinLengthValidator(),
+                new MaxLengthValidator(),
+                new LetterValidator(),
+                new DigitValidator()
+            };
+
+            var service = new PasswordCheckerService(validators, new SqlRepository());
+
+            string[] passwords = { "qwerty", "qwertyuiop", "qweRty123", "123456789", "veryShortPassword"};
+
+            foreach (var password in passwords)
+            {
+                Console.WriteLine(service.VerifyPassword(password));
+            }
         }
     }
 }
