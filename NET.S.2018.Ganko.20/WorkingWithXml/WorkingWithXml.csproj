@@ -40,7 +40,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileUrlProvider.cs" />
+    <Compile Include="Interfaces\IFileUrlProvider.cs" />
+    <Compile Include="Interfaces\IUrlAdressParser.cs" />
+    <Compile Include="Interfaces\IUrlConverterToXml.cs" />
+    <Compile Include="UrlAdressParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Entities\UrlAddress.cs" />
+    <Compile Include="UrlConverterToXml.cs" />
+    <Compile Include="UrlService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Logger\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
