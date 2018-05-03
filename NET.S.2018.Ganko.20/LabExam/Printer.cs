@@ -5,7 +5,9 @@ namespace LabExam
 {
     public sealed class Printer : IEquatable<Printer>
     {
-        public event EventHandler<PrintEventArgs> PrintEvent = delegate { };
+        public event EventHandler<PrintEventArgs> PrintStarted = delegate { };
+
+        public event EventHandler<PrintEventArgs> PrintEnded = delegate { };
 
         public Printer(string name, string model)
         {
@@ -21,7 +23,7 @@ namespace LabExam
 
         public void Print(FileStream fileStream)
         {
-            OnPrint(new PrintEventArgs(this, $"Printer:{Name} {Model}: Printing started"));
+            OnPrintStarted(new PrintEventArgs(this, $"Printer:{Name} {Model}: Printing started"));
 
             using (fileStream)
             {
@@ -32,7 +34,7 @@ namespace LabExam
                 }
             }
 
-            OnPrint(new PrintEventArgs(this, $"Printer:{Name} {Model}: Printing ended"));
+            OnPrintEnded(new PrintEventArgs(this, $"Printer:{Name} {Model}: Printing ended"));
         }
 
         public override string ToString()
@@ -81,9 +83,15 @@ namespace LabExam
             return Name.GetHashCode() ^ Model.GetHashCode();
         }
 
-        private void OnPrint(PrintEventArgs e)
+        private void OnPrintStarted(PrintEventArgs e)
         {
-            EventHandler<PrintEventArgs> temp = PrintEvent;
+            EventHandler<PrintEventArgs> temp = PrintStarted;
+            temp?.Invoke(this, e);
+        }
+
+        private void OnPrintEnded(PrintEventArgs e)
+        {
+            EventHandler<PrintEventArgs> temp = PrintEnded;
             temp?.Invoke(this, e);
         }
 

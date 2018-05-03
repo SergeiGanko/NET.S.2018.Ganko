@@ -5,14 +5,33 @@ using System.Windows.Forms;
 
 namespace LabExam
 {
-    internal static class PrinterManager
+    internal sealed class PrinterManager
     {
-        static PrinterManager()
+        private static readonly Lazy<PrinterManager> instance = 
+            new Lazy<PrinterManager>(() => new PrinterManager());
+
+        private static ILogger logger = new Logger("log.txt");
+
+        private PrinterManager()
         {
             Printers = new List<Printer>();
         }
 
-        public static ILogger Logger { get; set; } = new Logger("log.txt");
+        public static PrinterManager Instance => instance.Value;
+
+        public static ILogger Logger
+        {
+            get => logger;
+            set
+            {
+                if (logger == null)
+                {
+                    throw new ArgumentNullException($"Argument {nameof(logger)} is null");
+                }
+
+                logger = value;
+            }
+        }
 
         public static List<Printer> Printers { get; set; }
 

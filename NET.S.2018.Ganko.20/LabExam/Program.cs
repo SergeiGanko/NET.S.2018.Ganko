@@ -1,63 +1,78 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LabExam
 {
-    class Program
+    internal sealed class Program
     {
-        static void Main(string[] args)
+        [STAThread]
+        private static void Main()
         {
-            //Console.WriteLine("Enter printer name");
-            //printer.Name = Console.ReadLine();
-            //Console.WriteLine("Enter printer model");
-            //printer.Model = Console.ReadLine();
+            var manager = PrinterManager.Instance;
 
-            Console.WriteLine("Select your choice:");
-            Console.WriteLine("1:Add new printer");
-            Console.WriteLine("2:Print on Canon");
-            Console.WriteLine("3:Print on Epson");
+            ConsoleKeyInfo consoleKeyInfo;
 
-            //var key = Console.ReadKey();
-
-            //if (key.Key == ConsoleKey.D1)
-            //{
-            //    CreatePrinter();
-            //}
-
-            //if (key.Key == ConsoleKey.D2)
-            //{
-            //    Print(new CanonPrinter());
-            //}
-
-            //if (key.Key == ConsoleKey.D3)
-            //{
-            //    Print(new EpsonPrinter());
-            //}
-
-            //while (true)
-            //{
+            do
+            {
+                Console.Clear();
+                Console.WriteLine("Select your choice:");
+                Console.WriteLine("1:Add new printer");
+                int number = 2;
                 
-            //}
+                if (PrinterManager.Printers.Any())
+                {
+                    foreach (var printer in PrinterManager.Printers)
+                    {
+                        Console.WriteLine($"{number++}:Print on {printer}");
+                    }
+                }
+
+                consoleKeyInfo = Console.ReadKey();
+
+                if (consoleKeyInfo.Key == ConsoleKey.D1)
+                {
+                    CreatePrinter();
+                }
+
+                if (consoleKeyInfo.Key >= ConsoleKey.D2 
+                    && consoleKeyInfo.Key <= ConsoleKey.D9)
+                {
+                    var index = (int)consoleKeyInfo.Key - 50;
+
+                    try
+                    {
+                        Print(PrinterManager.Printers.ElementAt(index));
+                    }
+                    catch (ArgumentOutOfRangeException)
+                    {
+                        Console.WriteLine("Printer not found");
+                    }
+                }
+            }
+            while (consoleKeyInfo.Key != ConsoleKey.Escape);
         }
 
-        //private static void Print(EpsonPrinter epsonPrinter)
-        //{
-        //    PrinterManager.Print(epsonPrinter);
-        //    PrinterManager.Log("Printed on Epson");
-        //}
+        private static void CreatePrinter()
+        {
+            Console.Clear();
+            Console.WriteLine("Creating new printer...\n");
+            Console.WriteLine("Enter printer name");
+            var name = Console.ReadLine();
+            Console.WriteLine("Enter printer model");
+            var model = Console.ReadLine();
 
-        //private static void Print(CanonPrinter canonPrinter)
-        //{
-        //    PrinterManager.Print(canonPrinter);
-        //    PrinterManager.Log("Printed on Canon");
-        //}
+            var newPrinter = new Printer(name, model);
 
-        //private static void CreatePrinter()
-        //{
-        //    PrinterManager.Add(new Printer());
-        //}
+            if (!PrinterManager.Add(newPrinter))
+            {
+                Console.WriteLine("Printer already exists");
+            }
+        }
+
+        private static void Print(Printer printer)
+        {
+            string path = @"log.txt";
+            PrinterManager.Print(printer, path);
+        }
     }
 }
