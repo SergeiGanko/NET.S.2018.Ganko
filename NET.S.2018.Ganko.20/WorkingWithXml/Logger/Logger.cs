@@ -1,16 +1,17 @@
 ﻿using System;
+using WorkingWithXml.Interfaces;
 using System.IO;
 
-namespace LabExam
+namespace WorkingWithXml.Logger
 {
     /// <summary>
     /// Class Logger
     /// </summary>
-    /// <seealso cref="LabExam.ILogger" />
+    /// <seealso cref="WorkingWithXml.Interfaces.ILogger" />
     public sealed class Logger : ILogger
     {
         /// <summary>
-        /// The path of log file
+        /// The path of text file
         /// </summary>
         private readonly string path;
 
@@ -18,7 +19,7 @@ namespace LabExam
         /// Initializes a new instance of the <see cref="Logger"/> class.
         /// </summary>
         /// <param name="path">The path.</param>
-        /// <exception cref="ArgumentNullException">Throws when path is null, empty or whitespace string</exception>
+        /// <exception cref="ArgumentNullException">Throws when path is null, empty or whitespace</exception>
         public Logger(string path)
         {
             if (string.IsNullOrWhiteSpace(path))
@@ -30,7 +31,7 @@ namespace LabExam
         }
 
         /// <summary>
-        /// Logs the specified message.
+        /// Logs the specified message to text file.
         /// </summary>
         /// <param name="message">The message.</param>
         public void Log(string message)

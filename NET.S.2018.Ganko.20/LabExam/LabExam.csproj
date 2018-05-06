@@ -43,8 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CanonPrinter.cs" />
+    <Compile Include="EpsonPrinter.cs" />
     <Compile Include="ILogger.cs" />
     <Compile Include="Logger.cs" />
+    <Compile Include="PrinterFactory.cs" />
     <Compile Include="PrinterManager.cs" />
     <Compile Include="Printer.cs" />
     <Compile Include="PrintEventArgs.cs" />

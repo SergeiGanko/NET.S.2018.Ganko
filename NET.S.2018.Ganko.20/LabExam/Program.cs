@@ -1,10 +1,17 @@
 ﻿using System;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace LabExam
 {
+    /// <summary>
+    /// Class Program represents a console user interface for managing printers
+    /// </summary>
     internal sealed class Program
     {
+        /// <summary>
+        /// Defines the entry point of the application.
+        /// </summary>
         [STAThread]
         private static void Main()
         {
@@ -14,14 +21,13 @@ namespace LabExam
 
             do
             {
-                Console.Clear();
-                Console.WriteLine("Select your choice:");
+                Console.WriteLine("\nSelect your choice:");
                 Console.WriteLine("1:Add new printer");
                 int number = 2;
                 
-                if (PrinterManager.Printers.Any())
+                if (manager.Printers.Any())
                 {
-                    foreach (var printer in PrinterManager.Printers)
+                    foreach (var printer in manager.Printers)
                     {
                         Console.WriteLine($"{number++}:Print on {printer}");
                     }
@@ -41,7 +47,7 @@ namespace LabExam
 
                     try
                     {
-                        Print(PrinterManager.Printers.ElementAt(index));
+                        Print(manager.Printers.ElementAt(index));
                     }
                     catch (ArgumentOutOfRangeException)
                     {
@@ -52,27 +58,51 @@ namespace LabExam
             while (consoleKeyInfo.Key != ConsoleKey.Escape);
         }
 
+        /// <summary>
+        /// Creates the printer.
+        /// </summary>
         private static void CreatePrinter()
         {
-            Console.Clear();
             Console.WriteLine("Creating new printer...\n");
-            Console.WriteLine("Enter printer name");
-            var name = Console.ReadLine();
-            Console.WriteLine("Enter printer model");
+            Console.WriteLine("Choose printer model:");
+            Console.WriteLine("1. Canon");
+            Console.WriteLine("2. Epson");
+            var consoleKeyInfo = Console.ReadKey();
+            Console.WriteLine("Enter printer model:");
             var model = Console.ReadLine();
 
-            var newPrinter = new Printer(name, model);
+            Printer newPrinter;
+            var manager = PrinterManager.Instance;
 
-            if (!PrinterManager.Add(newPrinter))
+            if (consoleKeyInfo.Key == ConsoleKey.D1)
             {
-                Console.WriteLine("Printer already exists");
+                newPrinter = PrinterFactory.CreatePrinter("Canon", model);
             }
+            else if (consoleKeyInfo.Key == ConsoleKey.D2)
+            {
+                newPrinter = PrinterFactory.CreatePrinter("Epson", model);
+            }
+            else
+            {
+                return;
+            }
+
+            manager.Add(newPrinter);
         }
 
+        /// <summary>
+        /// Prints on the specified printer.
+        /// </summary>
+        /// <param name="printer">The printer.</param>
         private static void Print(Printer printer)
         {
-            string path = @"log.txt";
-            PrinterManager.Print(printer, path);
+            var manager = PrinterManager.Instance;
+
+            using (var openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.ShowDialog();
+                manager.Print(printer, openFileDialog.FileName);
+            }
         }
     }
 }

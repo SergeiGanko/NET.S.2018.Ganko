@@ -3,45 +3,76 @@ using System.IO;
 
 namespace LabExam
 {
-    public sealed class Printer : IEquatable<Printer>
+    /// <summary>
+    /// Class represents abstract printer
+    /// </summary>
+    /// <seealso cref="Printer" />
+    public abstract class Printer : IEquatable<Printer>
     {
-        public event EventHandler<PrintEventArgs> PrintStarted = delegate { };
+        /// <summary>
+        /// Occurs when print start.
+        /// </summary>
+        public event EventHandler<PrintEventArgs> PrintStart = delegate { };
 
-        public event EventHandler<PrintEventArgs> PrintEnded = delegate { };
+        /// <summary>
+        /// Occurs when print end.
+        /// </summary>
+        public event EventHandler<PrintEventArgs> PrintEnd = delegate { };
 
-        public Printer(string name, string model)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Printer"/> class.
+        /// </summary>
+        /// <param name="model">The model of the printer.</param>
+        protected Printer(string model)
         {
-            CheckInput(name, model);
+            CheckInput(model);
 
-            Name = name;
             Model = model;
         }
 
-        public string Name { get; set; }
+        /// <summary>
+        /// Gets the name.
+        /// </summary>
+        public abstract string Name { get; }
 
+        /// <summary>
+        /// Gets or sets the model.
+        /// </summary>
         public string Model { get; set; }
 
-        public void Print(FileStream fileStream)
+        /// <summary>
+        /// Emulates printing on a concrete printer.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        protected abstract void EmulatePrint(Stream stream);
+
+        public void Print(Stream stream)
         {
             OnPrintStarted(new PrintEventArgs(this, $"Printer:{Name} {Model}: Printing started"));
 
-            using (fileStream)
-            {
-                for (int i = 0; i < fileStream.Length; i++)
-                {
-                    // simulate printing
-                    Console.WriteLine(fileStream.ReadByte());
-                }
-            }
+            EmulatePrint(stream);
 
             OnPrintEnded(new PrintEventArgs(this, $"Printer:{Name} {Model}: Printing ended"));
         }
 
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String" /> that represents this instance.
+        /// </returns>
         public override string ToString()
         {
             return $"{Name} {Model}";
         }
 
+        /// <summary>
+        /// Determines whether the specified <see cref="System.Object" />, is equal to this instance.
+        /// </summary>
+        /// <param name="obj">The <see cref="System.Object" /> to compare with this instance.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.
+        /// </returns>
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj))
@@ -62,6 +93,13 @@ namespace LabExam
             return Equals((Printer)obj);
         }
 
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>
+        ///   <see langword="true" /> if the current object is equal to the <paramref name="other" /> parameter; otherwise, <see langword="false" />.
+        /// </returns>
         public bool Equals(Printer other)
         {
             if (ReferenceEquals(null, other))
@@ -74,34 +112,48 @@ namespace LabExam
                 return true;
             }
 
-            return string.Equals(this.Name, other.Name) 
+            return string.Equals(this.Name, other.Name)
                    && string.Equals(this.Model, other.Model);
         }
 
+        /// <summary>
+        /// Returns a hash code for this instance.
+        /// </summary>
+        /// <returns>
+        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+        /// </returns>
         public override int GetHashCode()
         {
-            return Name.GetHashCode() ^ Model.GetHashCode();
+            return (Name.GetHashCode() * 73) ^ Model.GetHashCode();
         }
 
-        private void OnPrintStarted(PrintEventArgs e)
+        /// <summary>
+        /// Raises the <see cref="E:PrintStarted" /> event.
+        /// </summary>
+        /// <param name="e">The <see cref="PrintEventArgs"/> instance containing the event data.</param>
+        protected virtual void OnPrintStarted(PrintEventArgs e)
         {
-            EventHandler<PrintEventArgs> temp = PrintStarted;
+            EventHandler<PrintEventArgs> temp = this.PrintStart;
             temp?.Invoke(this, e);
         }
 
-        private void OnPrintEnded(PrintEventArgs e)
+        /// <summary>
+        /// Raises the <see cref="E:PrintEnded" /> event.
+        /// </summary>
+        /// <param name="e">The <see cref="PrintEventArgs"/> instance containing the event data.</param>
+        protected virtual void OnPrintEnded(PrintEventArgs e)
         {
-            EventHandler<PrintEventArgs> temp = PrintEnded;
+            EventHandler<PrintEventArgs> temp = this.PrintEnd;
             temp?.Invoke(this, e);
         }
 
-        private void CheckInput(string name, string model)
+        /// <summary>
+        /// Checks the input.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <exception cref="ArgumentNullException">Throws the model is null or empty string</exception>
+        private void CheckInput(string model)
         {
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                throw new ArgumentNullException($"Argument {nameof(name)} is null or empty");
-            }
-
             if (string.IsNullOrWhiteSpace(model))
             {
                 throw new ArgumentNullException($"Argument {nameof(model)} is null or empty");

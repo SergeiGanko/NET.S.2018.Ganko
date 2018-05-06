@@ -1,13 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using WorkingWithXml.Entities;
 using WorkingWithXml.Interfaces;
+using System.Collections.Generic;
 
 namespace WorkingWithXml
 {
-    public sealed class UrlAdressParser : IUrlAdressParser
+    /// <summary>
+    /// Parser class
+    /// </summary>
+    /// <seealso cref="UrlAddress" />
+    public sealed class Parser : IParser<string, UrlAddress>
     {
+        /// <summary>
+        /// Parses the specified URL.
+        /// </summary>
+        /// <param name="url">The URL.</param>
+        /// <returns>Returns instance of UrlAddress</returns>
+        /// <exception cref="ArgumentNullException">Throws when url is null or empty</exception>
         public UrlAddress Parse(string url)
         {
             if (string.IsNullOrWhiteSpace(url))
@@ -20,14 +30,12 @@ namespace WorkingWithXml
             {
                 var urlAddress = new UrlAddress();
 
-                urlAddress.OriginalString = uri.OriginalString;
                 urlAddress.Scheme = uri.Scheme;
                 urlAddress.Host = uri.Host;
 
                 if (uri.Segments.Length > 0)
                 {
                     urlAddress.Segments = uri.Segments.Skip(1).ToList();
-                    //.Select(str => new string(str.TakeWhile(ch => ch != '/').ToArray())).ToArray();
                 }
                 else
                 {
@@ -43,7 +51,6 @@ namespace WorkingWithXml
                         var key = parameter.TakeWhile(c => c != '=').ToArray();
                         var value = parameter.SkipWhile(c => c != '=').Skip(1).ToArray();
                         var keyValue = new KeyValuePair<string, string>(new string(key), new string(value));
-
                         urlAddress.Parameters.Add(keyValue);
                     }
                 }
