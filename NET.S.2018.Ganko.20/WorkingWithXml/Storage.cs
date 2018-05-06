@@ -54,6 +54,8 @@ namespace WorkingWithXml
                                     new XAttribute("value", pair.Value), 
                                     new XAttribute("key", pair.Key))))))));
 
+            document.Descendants().Where(e => e.Name == "parameters" && !e.HasElements);
+
             document.Save(path);
         }
     }
