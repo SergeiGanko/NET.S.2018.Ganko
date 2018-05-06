@@ -38,7 +38,9 @@ namespace WorkingWithXml.Logger
         {
             if (!File.Exists(path))
             {
-                File.Create(path);
+                using (File.Create(path))
+                {
+                }
             }
 
             using (var stream = new FileStream(this.path, FileMode.Append))

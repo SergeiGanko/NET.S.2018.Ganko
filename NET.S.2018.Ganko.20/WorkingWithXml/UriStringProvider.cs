@@ -44,22 +44,18 @@ namespace WorkingWithXml
         /// </returns>
         public IEnumerable<string> GetAllData()
         {
-            var result = new List<string>();
-
             using (var fileStream = File.OpenRead(this.path))
             {
                 using (var reader = new StreamReader(fileStream))
                 {
-                    var line = String.Empty;
+                    string line;
 
                     while ((line = reader.ReadLine()) != null)
                     {
-                        result.Add(line);
+                        yield return line;
                     }
                 }
             }
-
-            return result;
         }
     }
 }

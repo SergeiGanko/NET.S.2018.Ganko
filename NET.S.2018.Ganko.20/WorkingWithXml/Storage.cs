@@ -39,12 +39,20 @@ namespace WorkingWithXml
         public void Store(IEnumerable<UrlAddress> urls)
         {
             XDocument document = new XDocument(
-                new XDeclaration("1.0", "utf-16", "yes"), 
-                new XElement("urlAdresses", urls.Select(uri =>
-                    new XElement("urlAddress", new XElement("host", new XAttribute("name", uri.Host)), 
-                        new XElement("uri", uri.Segments.Select(segment => new XElement("segment", segment))),
-                        new XElement("parameters", uri.Parameters.Select(pair => 
-                            new XElement("parameter", new XAttribute("value", pair.Value), new XAttribute("key", pair.Key))))))));
+                new XDeclaration("1.0", "utf-16", null),
+                new XElement(
+                    "urlAdresses",
+                    urls.Select(uri =>
+                        new XElement(
+                            "urlAddress",
+                            new XElement("host", 
+                                new XAttribute("name", uri.Host)),
+                            new XElement("uri", uri.Segments?.Select(segment => 
+                                new XElement("segment", segment))),
+                            new XElement("parameters", uri.Parameters?.Select(pair =>
+                                new XElement("parameter", 
+                                    new XAttribute("value", pair.Value), 
+                                    new XAttribute("key", pair.Key))))))));
 
             document.Save(path);
         }
