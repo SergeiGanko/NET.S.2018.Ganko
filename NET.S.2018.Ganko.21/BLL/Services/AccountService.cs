@@ -6,22 +6,23 @@ using System.Threading.Tasks;
 using BLL.Interface.Entities;
 using BLL.Interface.Interfaces;
 using DAL.Interface.Interfaces;
+using DAL.Interface.DTO;
+using BLL.Factories;
+using BLL.Mappers;
 
 namespace BLL.Services
 {
-    using DAL.Interface.DTO;
-
     public sealed class AccountService : IAccountService
     {
-        private IAccountNumberCreateSevice _accountNumberCreateSevice;
+        private readonly IAccountCreator creator;
 
-        private IRepository<AccountDto> _repository;
+        private readonly IRepository<AccountDto> repository;
 
-        public AccountService(IAccountNumberCreateSevice accountNumberCreateSevice,
+        public AccountService(IAccountCreator creator,
                               IRepository<AccountDto> repository)
         {
-            _accountNumberCreateSevice = accountNumberCreateSevice ?? throw new ArgumentNullException($"Argument {nameof(accountNumberCreateSevice)} is null");
-            _repository = repository ?? throw new ArgumentNullException($"Argument {nameof(repository)} is null");
+            this.creator = creator ?? throw new ArgumentNullException($"Argument {nameof(creator)} is null");
+            this.repository = repository ?? throw new ArgumentNullException($"Argument {nameof(repository)} is null");
         }
 
         public void OpenAccount(AccountType accountType, Client client, decimal startBalance)
@@ -36,12 +37,14 @@ namespace BLL.Services
                 throw new ArgumentOutOfRangeException($"Argument {nameof(startBalance)} must be greater or equal zero");
             }
 
-            Account newAccount = null;
+            Account newAccount = this.creator.Create(accountType, client, startBalance);
+            this.repository.Create(newAccount.ToAccountDto());
+
         }
 
         public void OpenAccount(AccountType accountType, Client client)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         public void CloseAccount(string accountNumber)

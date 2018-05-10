@@ -1,5 +1,7 @@
 ﻿using BLL.Interface.Entities;
 using DAL.Interface.DTO;
+using BLL.Services;
+using BLL.Factories;
 
 namespace BLL.Mappers
 {
@@ -21,37 +23,26 @@ namespace BLL.Mappers
 
         public static Account ToAccount(this AccountDto account)
         {
-            Account newAccount = null;
+            AccountType type = AccountType.Basic;
 
-            switch (account.AccountType)
+            if (account.AccountType == "Silver")
             {
-                case "Basic":
-                    newAccount = new BasicAccount(
-                        account.AccountNumber,
-                        new Client(account.FirstName, account.LastName, account.PassportNumber, account.Email),
-                        account.Balance);
-                    break;
-                case "Silver":
-                    newAccount = new SilverAccount(
-                        account.AccountNumber,
-                        new Client(account.FirstName, account.LastName, account.PassportNumber, account.Email),
-                        account.Balance);
-                    break;
-                case "Gold":
-                    newAccount = new GoldAccount(
-                        account.AccountNumber,
-                        new Client(account.FirstName, account.LastName, account.PassportNumber, account.Email),
-                        account.Balance);
-                    break;
-                case "Platinum":
-                    newAccount = new PlatinumAccount(
-                        account.AccountNumber,
-                        new Client(account.FirstName, account.LastName, account.PassportNumber, account.Email),
-                        account.Balance);
-                    break;
+                type = AccountType.Silver;
+            }
+            else if (account.AccountType == "Gold")
+            {
+                type = AccountType.Gold;
+            }
+            else if (account.AccountType == "Platinum")
+            {
+                type = AccountType.Platinum;
             }
 
-            return newAccount;
+            var creator = new AccountCreator(new AccountNumberCreateSevice());
+
+            return creator.Create(type,
+                new Client(account.FirstName, account.LastName, account.PassportNumber, account.Email),
+                account.Balance);
         }
     }
 }

@@ -47,7 +47,7 @@
     <Compile Include="Entities\GoldAccount.cs" />
     <Compile Include="Entities\PlatinumAccount.cs" />
     <Compile Include="Entities\SilverAccount.cs" />
-    <Compile Include="Interfaces\IAccountCreateService.cs" />
+    <Compile Include="Interfaces\IAccountCreator.cs" />
     <Compile Include="Interfaces\IAccountNumberCreateSevice.cs" />
     <Compile Include="Interfaces\IAccountService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

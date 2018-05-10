@@ -4,6 +4,7 @@ using BLL.Services;
 using DAL.Fake.Repositories;
 using DAL.Interface.DTO;
 using DAL.Interface.Interfaces;
+using BLL.Factories;
 
 namespace DependencyResolver
 {
@@ -15,6 +16,7 @@ namespace DependencyResolver
             kernel.Bind<IRepository<AccountDto>>().To<FakeRepository>();
             //kernel.Bind<IRepository>().To<AccountBinaryRepository>().WithConstructorArgument("test.bin");
             kernel.Bind<IAccountNumberCreateSevice>().To<AccountNumberCreateSevice>().InSingletonScope();
+            kernel.Bind<IAccountCreator>().To<AccountCreator>();
             //kernel.Bind<IApplicationSettings>().To<ApplicationSettings>();
         }
     }

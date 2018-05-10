@@ -41,15 +41,7 @@ namespace DAL.Fake.Repositories
 
         public IEnumerable<AccountDto> GetAll()
         {
-            if (!accounts.Any()) yield break;
-
-            foreach (var account in accounts)
-            {
-                if (account.IsClosed != true)
-                {
-                    yield return account;
-                }
-            }
+            return accounts;
         }
 
         public AccountDto Get(AccountDto entity)
