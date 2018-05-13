@@ -12,11 +12,13 @@ namespace DependencyResolver
     {
         public static void ConfigurateResolver(this IKernel kernel)
         {
-            kernel.Bind<IAccountService>().To<AccountService>();
             kernel.Bind<IRepository<AccountDto>>().To<FakeRepository>();
+            kernel.Bind<IAccountCreator>().To<AccountCreator>();
+            kernel.Bind<IAccountService>().To<AccountService>();
+            
             //kernel.Bind<IRepository>().To<AccountBinaryRepository>().WithConstructorArgument("test.bin");
             kernel.Bind<IAccountNumberCreateSevice>().To<AccountNumberCreateSevice>().InSingletonScope();
-            kernel.Bind<IAccountCreator>().To<AccountCreator>();
+            
             //kernel.Bind<IApplicationSettings>().To<ApplicationSettings>();
         }
     }

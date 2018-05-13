@@ -2,33 +2,63 @@
 
 namespace BLL.Interface.Entities
 {
+    /// <inheritdoc />
     /// <summary>
     /// The PlatinumAccount class
     /// </summary>
-    /// <seealso cref="Account" />
-    public sealed class PlatinumAccount : Account
+    /// <seealso cref="T:BLL.Interface.Entities.Account" />
+    public class PlatinumAccount : Account
     {
-        #region Ctors
+        #region Consts
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PlatinumAccount"/> class.
+        /// The platinum account deposit value
+        /// </summary>
+        private const int platinumAccountDepositValue = 5;
+
+        /// <summary>
+        /// The platinum account balance value
+        /// </summary>
+        private const int platinumAccountBalanceValue = 1;
+
+        #endregion
+
+        #region Ctors
+
+        /// <inheritdoc />
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:BLL.Interface.Entities.PlatinumAccount" /> class.
+        /// </summary>
+        internal PlatinumAccount()
+        {
+            Type = AccountType.Platinum;
+            DepositValue = platinumAccountDepositValue;
+            BalanceValue = platinumAccountBalanceValue;
+        }
+
+        /// <inheritdoc />
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:BLL.Interface.Entities.PlatinumAccount" /> class.
         /// </summary>
         /// <param name="accountNumber">The account number.</param>
         /// <param name="client">The client.</param>
-        public PlatinumAccount(string accountNumber, Client client) : base(accountNumber, client)
+        internal PlatinumAccount(string accountNumber, Client client) : this()
         {
-            Type = AccountType.Platinum;
-            DepositValue = 5;
-            BalanceValue = 1;
+            CkeckInput(accountNumber, client);
+
+            AccountNumber = accountNumber;
+            Client = client;
+            IsClosed = false;
         }
 
+        /// <inheritdoc />
         /// <summary>
-        /// Initializes a new instance of the <see cref="PlatinumAccount"/> class.
+        /// Initializes a new instance of the <see cref="T:BLL.Interface.Entities.PlatinumAccount" /> class.
         /// </summary>
         /// <param name="firstName">The first name.</param>
         /// <param name="lastName">The last name.</param>
         /// <param name="balance">The balance.</param>
-        public PlatinumAccount(string accountNumber, Client client, decimal balance)
+        internal PlatinumAccount(string accountNumber, Client client, decimal balance)
             : this(accountNumber, client)
         {
             if (balance < 0)
@@ -44,8 +74,9 @@ namespace BLL.Interface.Entities
 
         #region Protected Members
 
+        /// <inheritdoc />
         /// <summary>
-        /// Calculates the deposit bonus.
+        /// Calculates the deposit bonus even if balance is negative.
         /// </summary>
         /// <param name="amount">The amount.</param>
         protected override void CalculateDepositBonus(decimal amount)
@@ -53,6 +84,7 @@ namespace BLL.Interface.Entities
             Bonus += (int)Math.Round((Balance * BalanceValue + amount * DepositValue) / 50);
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Calculates the withdraw bonus.
         /// </summary>
@@ -69,6 +101,18 @@ namespace BLL.Interface.Entities
             {
                 Bonus = 0;
             }
+        }
+
+        /// <inheritdoc />
+        /// <summary>
+        /// Withdraws the money. Allows to have a negative balance 
+        /// </summary>
+        /// <param name="amount">The amount.</param>
+        protected override void WithdrawMoney(decimal amount)
+        {
+            Balance -= amount;
+
+            CalculateWithdrawBonus(amount);
         }
 
         #endregion

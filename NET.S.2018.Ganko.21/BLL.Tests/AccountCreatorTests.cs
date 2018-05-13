@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BLL.Tests
 {
-    public class Class1
+    class AccountCreatorTests
     {
     }
 }

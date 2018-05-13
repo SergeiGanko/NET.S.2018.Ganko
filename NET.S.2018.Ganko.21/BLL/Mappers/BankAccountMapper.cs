@@ -1,7 +1,6 @@
 ﻿using BLL.Interface.Entities;
 using DAL.Interface.DTO;
-using BLL.Services;
-using BLL.Factories;
+using BLL.Interface.Interfaces;
 
 namespace BLL.Mappers
 {
@@ -21,28 +20,9 @@ namespace BLL.Mappers
                     IsClosed = account.IsClosed
                 };
 
-        public static Account ToAccount(this AccountDto account)
+        public static Account ToAccount(this AccountDto dto, IAccountCreator creator)
         {
-            AccountType type = AccountType.Basic;
-
-            if (account.AccountType == "Silver")
-            {
-                type = AccountType.Silver;
-            }
-            else if (account.AccountType == "Gold")
-            {
-                type = AccountType.Gold;
-            }
-            else if (account.AccountType == "Platinum")
-            {
-                type = AccountType.Platinum;
-            }
-
-            var creator = new AccountCreator(new AccountNumberCreateSevice());
-
-            return creator.Create(type,
-                new Client(account.FirstName, account.LastName, account.PassportNumber, account.Email),
-                account.Balance);
+            return creator.Create(dto);
         }
     }
 }

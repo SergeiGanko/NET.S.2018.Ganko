@@ -5,9 +5,9 @@ namespace BLL.Interface.Interfaces
 {
     public interface IAccountService
     {
-        void OpenAccount(AccountType accountType, Client client, decimal startBalance);
+        Account OpenAccount(AccountType accountType, Client client, decimal startBalance);
 
-        void OpenAccount(AccountType accountType, Client client);
+        Account OpenAccount(AccountType accountType, Client client);
 
         void CloseAccount(string accountNumber);
 
@@ -15,14 +15,18 @@ namespace BLL.Interface.Interfaces
 
         void DepositAccount(string accountNumber, decimal amount);
 
+        void DepositAccount(Account account, decimal amount);
+
         void WithdrawAccount(string accountNumber, decimal amount);
+
+        void WithdrawAccount(Account account, decimal amount);
 
         void Transfer(string fromAccountNumber, string toAccountNumber, decimal amount);
 
-        //Account GetAccount(string accountNumber);
+        void Transfer(Account fromAccount, Account toAccount, decimal amount);
 
-        //IEnumerable<Account> GetClientsAccounts(Client client); 
+        Account GetByAccountNumber(string accountNumber);
         
-        //IEnumerable<Account> GetAllAccounts();
+        IEnumerable<Account> GetAllAccounts();
     }
 }

@@ -52,6 +52,11 @@
     <Compile Include="Interfaces\IAccountService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\DAL.Interface\DAL.Interface.csproj">
+      <Project>{1283E81C-F041-4127-BC30-6917FA591C64}</Project>
+      <Name>DAL.Interface</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

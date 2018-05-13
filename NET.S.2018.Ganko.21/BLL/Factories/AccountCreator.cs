@@ -1,6 +1,7 @@
 ﻿using System;
 using BLL.Interface.Entities;
 using BLL.Interface.Interfaces;
+using DAL.Interface.DTO;
 
 namespace BLL.Factories
 {
@@ -53,6 +54,70 @@ namespace BLL.Factories
                         client,
                         startBalance);
                 default: throw new InvalidOperationException($"The following account type {accountType} doesn't exist");
+            }
+        }
+
+        public Account Create(AccountDto dto)
+        {
+            switch (dto.AccountType)
+            {
+                case "Basic":
+                    return new BasicAccount
+                    {
+                        AccountNumber = dto.AccountNumber,
+                        Client = new Client(
+                                       dto.FirstName,
+                                       dto.LastName,
+                                       dto.PassportNumber,
+                                       dto.Email),
+                        Balance = dto.Balance,
+                        Bonus = dto.Bonus,
+                        Type = AccountType.Basic,
+                        IsClosed = dto.IsClosed
+                    };
+                case "Silver":
+                    return new SilverAccount
+                    {
+                        AccountNumber = dto.AccountNumber,
+                        Client = new Client(
+                                       dto.FirstName,
+                                       dto.LastName,
+                                       dto.PassportNumber,
+                                       dto.Email),
+                        Balance = dto.Balance,
+                        Bonus = dto.Bonus,
+                        Type = AccountType.Silver,
+                        IsClosed = dto.IsClosed
+                    };
+                case "Gold":
+                    return new GoldAccount
+                    {
+                        AccountNumber = dto.AccountNumber,
+                        Client = new Client(
+                                       dto.FirstName,
+                                       dto.LastName,
+                                       dto.PassportNumber,
+                                       dto.Email),
+                        Balance = dto.Balance,
+                        Bonus = dto.Bonus,
+                        Type = AccountType.Gold,
+                        IsClosed = dto.IsClosed
+                    };
+                case "Platinum":
+                    return new PlatinumAccount
+                    {
+                        AccountNumber = dto.AccountNumber,
+                        Client = new Client(
+                                       dto.FirstName,
+                                       dto.LastName,
+                                       dto.PassportNumber,
+                                       dto.Email),
+                        Balance = dto.Balance,
+                        Bonus = dto.Bonus,
+                        Type = AccountType.Platinum,
+                        IsClosed = dto.IsClosed
+                    };
+                default: throw new InvalidOperationException($"The following account type {dto.AccountType} doesn't exist");
             }
         }
     }

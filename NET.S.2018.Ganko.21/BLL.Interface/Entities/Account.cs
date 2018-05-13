@@ -2,6 +2,7 @@
 
 namespace BLL.Interface.Entities
 {
+    /// <inheritdoc />
     /// <summary>
     /// The abstract class represents Bank Account
     /// </summary>
@@ -12,15 +13,8 @@ namespace BLL.Interface.Entities
         /// <summary>
         /// Initializes a new instance of the <see cref="Account"/> class.
         /// </summary>
-        /// <param name="accountNumber">The account number.</param>
-        /// <param name="client">The client.</param>
-        protected Account(string accountNumber, Client client)
+        internal Account()
         {
-            CkeckInput(accountNumber, client);
-
-            AccountNumber = accountNumber;
-            Client = client;
-            IsClosed = false;
         }
 
         #endregion
@@ -30,41 +24,41 @@ namespace BLL.Interface.Entities
         /// <summary>
         /// Gets the account number.
         /// </summary>
-        public string AccountNumber { get; private set; }
+        public string AccountNumber { get; internal set; }
 
         /// <summary>
         /// Gets the client.
         /// </summary>
-        public Client Client { get; private set; }
+        public Client Client { get; internal set; }
 
         /// <summary>
-        /// Gets the balance.
+        /// Gets or sets the balance.
         /// </summary>
-        public decimal Balance { get; protected set; }
+        public decimal Balance { get; protected internal set; }
 
         /// <summary>
-        /// Gets the bonus.
+        /// Gets or sets the bonus.
         /// </summary>
-        public int Bonus { get; protected set; }
+        public int Bonus { get; protected internal set; }
 
         /// <summary>
-        /// Gets the account type.
+        /// Gets or sets the type.
         /// </summary>
-        public AccountType Type { get; protected set; }
+        public AccountType Type { get; protected internal set; }
 
         /// <summary>
-        /// Gets a value indicating whether this instance of account is closed.
+        /// Gets or sets a value indicating whether this instance is closed.
         /// </summary>
         /// <value>
         ///   <c>true</c> if this instance is closed; otherwise, <c>false</c>.
         /// </value>
-        public bool IsClosed { get; private set; }
+        public bool IsClosed { get; protected internal set; }
 
         /// <summary>
         /// Deposits the specified amount.
         /// </summary>
         /// <param name="amount">The amount.</param>
-        public void Deposit(decimal amount)
+        internal void Deposit(decimal amount)
         {
             CheckAmount(amount);
 
@@ -76,18 +70,11 @@ namespace BLL.Interface.Entities
         /// Withdraws the specified amount.
         /// </summary>
         /// <param name="amount">The amount.</param>
-        /// <exception cref="ArgumentException">Throws when ballance is below zero</exception>
-        public void Withdraw(decimal amount)
+        internal void Withdraw(decimal amount)
         {
             CheckAmount(amount);
 
-            if (Balance < amount)
-            {
-                throw new ArgumentException($"Not enough minerals =)");
-            }
-
-            Balance -= amount;
-            CalculateWithdrawBonus(amount);
+            WithdrawMoney(amount);
         }
 
         /// <summary>
@@ -96,7 +83,7 @@ namespace BLL.Interface.Entities
         /// <exception cref="System.InvalidOperationException">
         /// Throws when ballance not equals zero
         /// </exception>
-        public void Close()
+        internal void Close()
         {
             if (Balance < 0)
             {
@@ -152,9 +139,22 @@ namespace BLL.Interface.Entities
         /// <param name="amount">The amount.</param>
         protected abstract void CalculateWithdrawBonus(decimal amount);
 
-        #endregion
+        /// <summary>
+        /// Withdraws the money. By default, balance must not be negative.
+        /// </summary>
+        /// <param name="amount">The amount.</param>
+        /// <exception cref="ArgumentException">Throws when balance is below zero</exception>
+        protected virtual void WithdrawMoney(decimal amount)
+        {
+            if (Balance < amount)
+            {
+                throw new ArgumentException($"Not enough money");
+            }
 
-        #region Private members
+            Balance -= amount;
+
+            CalculateWithdrawBonus(amount);
+        }
 
         /// <summary>
         /// Ckecks the input.
@@ -164,7 +164,7 @@ namespace BLL.Interface.Entities
         /// <param name="bonus">The bonus.</param>
         /// <exception cref="System.ArgumentException">Throws when accountNumber is null, empty or whitespace</exception>
         /// <exception cref="System.ArgumentNullException">Throws when client is null</exception>
-        private void CkeckInput(string accountNumber, Client client)
+        protected void CkeckInput(string accountNumber, Client client)
         {
             if (string.IsNullOrWhiteSpace(accountNumber))
             {
@@ -176,6 +176,10 @@ namespace BLL.Interface.Entities
                 throw new ArgumentNullException($"Argument {nameof(client)} is null");
             }
         }
+
+        #endregion
+
+        #region Private members
 
         /// <summary>
         /// Checks the amount.
@@ -194,6 +198,13 @@ namespace BLL.Interface.Entities
 
         #region IEquatable<Account> members implementation
 
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <param name="other">An object to compare with this object.</param>
+        /// <returns>
+        ///   <see langword="true" /> if the current object is equal to the <paramref name="other" /> parameter; otherwise, <see langword="false" />.
+        /// </returns>
         public bool Equals(Account other)
         {
             if (ReferenceEquals(null, other))
@@ -206,11 +217,16 @@ namespace BLL.Interface.Entities
                 return true;
             }
 
-            return string.Equals(this.AccountNumber, other.AccountNumber) 
-                   && this.Client.Equals(other.Client) 
-                   && this.Type == other.Type;
+            return string.Equals(this.AccountNumber, other.AccountNumber);
         }
 
+        /// <summary>
+        /// Determines whether the specified <see cref="System.Object" />, is equal to this instance.
+        /// </summary>
+        /// <param name="obj">The <see cref="System.Object" /> to compare with this instance.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.
+        /// </returns>
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj))
@@ -228,13 +244,20 @@ namespace BLL.Interface.Entities
             return Equals((Account)obj);
         }
 
+        /// <summary>
+        /// Returns a hash code for this instance.
+        /// </summary>
+        /// <returns>
+        /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+        /// </returns>
         public override int GetHashCode()
         {
             unchecked
             {
                 var hashCode = this.AccountNumber.GetHashCode();
-                hashCode = (hashCode * 73) ^ this.Client.GetHashCode();
-                hashCode = (hashCode * 73) ^ (int)this.Type;
+                hashCode = (hashCode * 73) ^ this.Client.FirstName.GetHashCode();
+                hashCode = (hashCode * 73) ^ this.Client.LastName.GetHashCode();
+                hashCode = (hashCode * 73) ^ this.Client.PassportNumber.GetHashCode();
                 return hashCode;
             }
         }

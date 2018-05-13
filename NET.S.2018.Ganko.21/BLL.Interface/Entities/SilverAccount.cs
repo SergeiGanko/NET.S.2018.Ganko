@@ -2,33 +2,63 @@
 
 namespace BLL.Interface.Entities
 {
+    /// <inheritdoc />
     /// <summary>
     /// The SilverAccount class
     /// </summary>
-    /// <seealso cref="Account" />
-    public sealed class SilverAccount : Account
+    /// <seealso cref="T:BLL.Interface.Entities.Account" />
+    public class SilverAccount : Account
     {
-        #region Ctors
+        #region Consts
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SilverAccount"/> class.
+        /// The silver account deposit value
+        /// </summary>
+        private const int silverAccountDepositValue = 2;
+
+        /// <summary>
+        /// The silver account balance value
+        /// </summary>
+        private const int silverAccountBalanceValue = 1;
+
+        #endregion
+
+        #region Ctors
+
+        /// <inheritdoc />
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:BLL.Interface.Entities.SilverAccount" /> class.
+        /// </summary>
+        internal SilverAccount()
+        {
+            Type = AccountType.Silver;
+            DepositValue = silverAccountDepositValue;
+            BalanceValue = silverAccountBalanceValue;
+        }
+
+        /// <inheritdoc />
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:BLL.Interface.Entities.SilverAccount" /> class.
         /// </summary>
         /// <param name="accountNumber">The account number.</param>
         /// <param name="client">The client.</param>
-        public SilverAccount(string accountNumber, Client client) : base(accountNumber, client)
+        internal SilverAccount(string accountNumber, Client client) : this()
         {
-            Type = AccountType.Silver;
-            DepositValue = 2;
-            BalanceValue = 1;
+            CkeckInput(accountNumber, client);
+
+            AccountNumber = accountNumber;
+            Client = client;
+            IsClosed = false;
         }
 
+        /// <inheritdoc />
         /// <summary>
-        /// Initializes a new instance of the <see cref="SilverAccount"/> class.
+        /// Initializes a new instance of the <see cref="T:BLL.Interface.Entities.SilverAccount" /> class.
         /// </summary>
         /// <param name="accountNumber">The account number.</param>
         /// <param name="client">The client.</param>
         /// <param name="balance">The balance.</param>
-        public SilverAccount(string accountNumber, Client client, decimal balance)
+        internal SilverAccount(string accountNumber, Client client, decimal balance)
             : this(accountNumber, client)
         {
             if (balance < 0)
@@ -44,6 +74,7 @@ namespace BLL.Interface.Entities
 
         #region Protected Members
 
+        /// <inheritdoc />
         /// <summary>
         /// Calculates the deposit bonus.
         /// </summary>
@@ -53,6 +84,7 @@ namespace BLL.Interface.Entities
             Bonus += (int)Math.Round((Balance * BalanceValue + amount * DepositValue) / 100);
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Calculates the withdraw bonus.
         /// </summary>
@@ -72,6 +104,5 @@ namespace BLL.Interface.Entities
         }
 
         #endregion
-
     }
 }

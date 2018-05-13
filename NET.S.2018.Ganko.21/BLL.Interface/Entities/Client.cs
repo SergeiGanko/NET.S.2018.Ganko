@@ -3,7 +3,7 @@
     /// <summary>
     /// Class represents bank client's account info
     /// </summary>
-    public sealed class Client
+    public class Client
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Client"/> class.

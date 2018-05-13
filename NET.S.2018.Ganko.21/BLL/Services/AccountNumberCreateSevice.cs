@@ -12,7 +12,7 @@ namespace BLL.Services
         private static readonly Random random = new Random();
 
         /// <summary>
-        /// Generates account number as an IBAN string.
+        /// Generates account number as an fake IBAN string.
         /// </summary>
         /// <returns>Returns account number</returns>
         public string Generate()
