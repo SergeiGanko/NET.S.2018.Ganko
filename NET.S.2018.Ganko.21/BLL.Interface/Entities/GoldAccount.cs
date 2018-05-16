@@ -29,7 +29,9 @@ namespace BLL.Interface.Entities
         /// <summary>
         /// Initializes a new instance of the <see cref="T:BLL.Interface.Entities.GoldAccount" /> class.
         /// </summary>
-        internal GoldAccount()
+        /// <param name="accountNumber">The account number.</param>
+        /// <param name="client">The client.</param>
+        public GoldAccount(string accountNumber, Client client) : base(accountNumber, client)
         {
             Type = AccountType.Gold;
             DepositValue = goldAccountDepositValue;
@@ -42,37 +44,44 @@ namespace BLL.Interface.Entities
         /// </summary>
         /// <param name="accountNumber">The account number.</param>
         /// <param name="client">The client.</param>
-        public GoldAccount(string accountNumber, Client client) : this()
-        {
-            CkeckInput(accountNumber, client);
-
-            AccountNumber = accountNumber;
-            Client = client;
-            IsClosed = false;
-        }
-
-        /// <inheritdoc />
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:BLL.Interface.Entities.GoldAccount" /> class.
-        /// </summary>
-        /// <param name="accountNumber">The account number.</param>
-        /// <param name="client">The client.</param>
         /// <param name="balance">The balance.</param>
         public GoldAccount(string accountNumber, Client client, decimal balance)
             : this(accountNumber, client)
         {
-            if (balance < 0)
-            {
-                throw new ArgumentOutOfRangeException($"Argument {nameof(balance)} must be greater than zero");
-            }
-
             Balance = balance;
             CalculateDepositBonus(balance);
         }
 
+        internal GoldAccount(string accountNumber, Client client, decimal balance, int bonus, bool isClosed)
+            : base(accountNumber, client, balance, bonus, isClosed)
+        {
+            Type = AccountType.Gold;
+            DepositValue = goldAccountDepositValue;
+            BalanceValue = goldAccountBalanceValue;
+        }
+
         #endregion
 
-        #region Protected Members
+        /// <summary>
+        /// Gets or sets the balance.
+        /// </summary>
+        /// <exception cref="System.ArgumentException">Throws when there is not enough money on the account for the withdrawal operation</exception>
+        public override decimal Balance
+        {
+            get => balance;
+            protected set => balance = value < -25000m
+                                           ? throw new ArgumentException($"{nameof(value)} is wrong value or more than current balance")
+                                           : value;
+            //protected set
+            //{
+            //    if (this.balance < -25000)
+            //    {
+            //        throw new ArgumentException($"Not enough money on the account");
+            //    }
+
+            //    this.balance = value;
+            //}
+        }
 
         /// <inheritdoc />
         /// <summary>
@@ -105,19 +114,5 @@ namespace BLL.Interface.Entities
                 Bonus = 0;
             }
         }
-
-        /// <inheritdoc />
-        /// <summary>
-        /// Withdraws the money. Allows to have a negative balance 
-        /// </summary>
-        /// <param name="amount">The amount.</param>
-        protected override void WithdrawMoney(decimal amount)
-        {
-            Balance -= amount;
-
-            CalculateWithdrawBonus(amount);
-        }
-
-        #endregion
     }
 }

@@ -29,7 +29,9 @@ namespace BLL.Interface.Entities
         /// <summary>
         /// Initializes a new instance of the <see cref="T:BLL.Interface.Entities.SilverAccount" /> class.
         /// </summary>
-        internal SilverAccount()
+        /// <param name="accountNumber">The account number.</param>
+        /// <param name="client">The client.</param>
+        internal SilverAccount(string accountNumber, Client client) : base(accountNumber, client)
         {
             Type = AccountType.Silver;
             DepositValue = silverAccountDepositValue;
@@ -42,37 +44,44 @@ namespace BLL.Interface.Entities
         /// </summary>
         /// <param name="accountNumber">The account number.</param>
         /// <param name="client">The client.</param>
-        internal SilverAccount(string accountNumber, Client client) : this()
-        {
-            CkeckInput(accountNumber, client);
-
-            AccountNumber = accountNumber;
-            Client = client;
-            IsClosed = false;
-        }
-
-        /// <inheritdoc />
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:BLL.Interface.Entities.SilverAccount" /> class.
-        /// </summary>
-        /// <param name="accountNumber">The account number.</param>
-        /// <param name="client">The client.</param>
         /// <param name="balance">The balance.</param>
         internal SilverAccount(string accountNumber, Client client, decimal balance)
             : this(accountNumber, client)
         {
-            if (balance < 0)
-            {
-                throw new ArgumentOutOfRangeException($"Argument {nameof(balance)} must be greater than zero");
-            }
-
             Balance = balance;
             CalculateDepositBonus(balance);
         }
 
+        internal SilverAccount(string accountNumber, Client client, decimal balance, int bonus, bool isClosed)
+            : base(accountNumber, client, balance, bonus, isClosed)
+        {
+            Type = AccountType.Silver;
+            DepositValue = silverAccountDepositValue;
+            BalanceValue = silverAccountBalanceValue;
+        }
+
         #endregion
 
-        #region Protected Members
+        /// <summary>
+        /// Gets or sets the balance.
+        /// </summary>
+        /// <exception cref="System.ArgumentException">Throws when there is not enough money on the account for the withdrawal operation</exception>
+        public override decimal Balance
+        {
+            get => balance;
+            protected set => balance = value < 0
+                                           ? throw new ArgumentException($"{nameof(value)} is wrong value or more than current balance")
+                                           : value;
+            //protected set
+            //{
+            //    if (this.balance < 0)
+            //    {
+            //        throw new ArgumentException($"Not enough money on the account");
+            //    }
+
+            //    this.balance = value;
+            //}
+        }
 
         /// <inheritdoc />
         /// <summary>
@@ -102,7 +111,5 @@ namespace BLL.Interface.Entities
                 Bonus = 0;
             }
         }
-
-        #endregion
     }
 }

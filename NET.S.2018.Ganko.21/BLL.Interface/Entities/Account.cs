@@ -8,43 +8,64 @@ namespace BLL.Interface.Entities
     /// </summary>
     public abstract class Account : IEquatable<Account>
     {
+        /// <summary>
+        /// The account balance
+        /// </summary>
+        protected decimal balance;
+
         #region Ctors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Account"/> class.
         /// </summary>
-        internal Account()
+        /// <param name="accountNumber">The account number.</param>
+        /// <param name="client">The client.</param>
+        protected Account(string accountNumber, Client client)
         {
+            CkeckInput(accountNumber, client);
+
+            AccountNumber = accountNumber;
+            Client = client;
+            IsClosed = false;
+        }
+
+        protected Account(string accountNumber, Client client, decimal balance, int bonus, bool isClosed)
+        {
+            AccountNumber = accountNumber;
+            Client = client;
+            Balance = balance;
+            Bonus = bonus;
+            IsClosed = isClosed;
         }
 
         #endregion
 
-        #region Public Members
+        #region Properties
 
         /// <summary>
         /// Gets the account number.
         /// </summary>
-        public string AccountNumber { get; internal set; }
+        public string AccountNumber { get; protected set; }
 
         /// <summary>
         /// Gets the client.
         /// </summary>
-        public Client Client { get; internal set; }
+        public Client Client { get; protected set; }
 
         /// <summary>
         /// Gets or sets the balance.
         /// </summary>
-        public decimal Balance { get; protected internal set; }
+        public abstract decimal Balance { get; protected set; }
 
         /// <summary>
         /// Gets or sets the bonus.
         /// </summary>
-        public int Bonus { get; protected internal set; }
+        public int Bonus { get; protected set; }
 
         /// <summary>
         /// Gets or sets the type.
         /// </summary>
-        public AccountType Type { get; protected internal set; }
+        public AccountType Type { get; protected set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is closed.
@@ -52,7 +73,21 @@ namespace BLL.Interface.Entities
         /// <value>
         ///   <c>true</c> if this instance is closed; otherwise, <c>false</c>.
         /// </value>
-        public bool IsClosed { get; protected internal set; }
+        public bool IsClosed { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the deposit value.
+        /// </summary>
+        protected int DepositValue { get; set; }
+
+        /// <summary>
+        /// Gets or sets the balance value.
+        /// </summary>
+        protected int BalanceValue { get; set; }
+
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// Deposits the specified amount.
@@ -74,7 +109,8 @@ namespace BLL.Interface.Entities
         {
             CheckAmount(amount);
 
-            WithdrawMoney(amount);
+            Balance -= amount;
+            CalculateWithdrawBonus(amount);
         }
 
         /// <summary>
@@ -113,20 +149,6 @@ namespace BLL.Interface.Entities
             return $"| {this.AccountNumber} | {Type} | {Client.FirstName + Client.LastName} | {Balance} | {Bonus} |";
         }
 
-        #endregion
-
-        #region Protected Members
-
-        /// <summary>
-        /// Gets or sets the deposit value.
-        /// </summary>
-        protected int DepositValue { get; set; }
-
-        /// <summary>
-        /// Gets or sets the balance value.
-        /// </summary>
-        protected int BalanceValue { get; set; }
-
         /// <summary>
         /// Calculates the deposit bonus.
         /// </summary>
@@ -139,22 +161,9 @@ namespace BLL.Interface.Entities
         /// <param name="amount">The amount.</param>
         protected abstract void CalculateWithdrawBonus(decimal amount);
 
-        /// <summary>
-        /// Withdraws the money. By default, balance must not be negative.
-        /// </summary>
-        /// <param name="amount">The amount.</param>
-        /// <exception cref="ArgumentException">Throws when balance is below zero</exception>
-        protected virtual void WithdrawMoney(decimal amount)
-        {
-            if (Balance < amount)
-            {
-                throw new ArgumentException($"Not enough money");
-            }
+        #endregion
 
-            Balance -= amount;
-
-            CalculateWithdrawBonus(amount);
-        }
+        #region Private methods
 
         /// <summary>
         /// Ckecks the input.
@@ -164,7 +173,7 @@ namespace BLL.Interface.Entities
         /// <param name="bonus">The bonus.</param>
         /// <exception cref="System.ArgumentException">Throws when accountNumber is null, empty or whitespace</exception>
         /// <exception cref="System.ArgumentNullException">Throws when client is null</exception>
-        protected void CkeckInput(string accountNumber, Client client)
+        private void CkeckInput(string accountNumber, Client client)
         {
             if (string.IsNullOrWhiteSpace(accountNumber))
             {
@@ -176,10 +185,6 @@ namespace BLL.Interface.Entities
                 throw new ArgumentNullException($"Argument {nameof(client)} is null");
             }
         }
-
-        #endregion
-
-        #region Private members
 
         /// <summary>
         /// Checks the amount.

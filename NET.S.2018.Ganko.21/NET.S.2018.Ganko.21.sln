@@ -19,6 +19,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DependencyResolver", "Depen
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsolePL", "ConsolePL\ConsolePL.csproj", "{E0DCE5D5-F66B-4365-BD22-5DCF8D01EC4A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcPL", "MvcPL\MvcPL.csproj", "{2E287A44-37D0-4855-9922-0E2FD90A39CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcPL.Tests", "MvcPL.Tests\MvcPL.Tests.csproj", "{801AD5C7-D7BF-4C3C-9080-FE0059DB0637}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +61,14 @@ Global
 		{E0DCE5D5-F66B-4365-BD22-5DCF8D01EC4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0DCE5D5-F66B-4365-BD22-5DCF8D01EC4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E0DCE5D5-F66B-4365-BD22-5DCF8D01EC4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E287A44-37D0-4855-9922-0E2FD90A39CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E287A44-37D0-4855-9922-0E2FD90A39CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E287A44-37D0-4855-9922-0E2FD90A39CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E287A44-37D0-4855-9922-0E2FD90A39CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{801AD5C7-D7BF-4C3C-9080-FE0059DB0637}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{801AD5C7-D7BF-4C3C-9080-FE0059DB0637}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{801AD5C7-D7BF-4C3C-9080-FE0059DB0637}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{801AD5C7-D7BF-4C3C-9080-FE0059DB0637}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

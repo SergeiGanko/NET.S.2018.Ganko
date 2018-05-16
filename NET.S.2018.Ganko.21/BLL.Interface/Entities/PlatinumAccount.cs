@@ -29,26 +29,13 @@ namespace BLL.Interface.Entities
         /// <summary>
         /// Initializes a new instance of the <see cref="T:BLL.Interface.Entities.PlatinumAccount" /> class.
         /// </summary>
-        internal PlatinumAccount()
+        /// <param name="accountNumber">The account number.</param>
+        /// <param name="client">The client.</param>
+        internal PlatinumAccount(string accountNumber, Client client) : base(accountNumber, client)
         {
             Type = AccountType.Platinum;
             DepositValue = platinumAccountDepositValue;
             BalanceValue = platinumAccountBalanceValue;
-        }
-
-        /// <inheritdoc />
-        /// <summary>
-        /// Initializes a new instance of the <see cref="T:BLL.Interface.Entities.PlatinumAccount" /> class.
-        /// </summary>
-        /// <param name="accountNumber">The account number.</param>
-        /// <param name="client">The client.</param>
-        internal PlatinumAccount(string accountNumber, Client client) : this()
-        {
-            CkeckInput(accountNumber, client);
-
-            AccountNumber = accountNumber;
-            Client = client;
-            IsClosed = false;
         }
 
         /// <inheritdoc />
@@ -61,18 +48,24 @@ namespace BLL.Interface.Entities
         internal PlatinumAccount(string accountNumber, Client client, decimal balance)
             : this(accountNumber, client)
         {
-            if (balance < 0)
-            {
-                throw new ArgumentOutOfRangeException($"Argument {nameof(balance)} must be greater than zero");
-            }
-
             Balance = balance;
             CalculateDepositBonus(balance);
         }
 
+        internal PlatinumAccount(string accountNumber, Client client, decimal balance, int bonus, bool isClosed)
+            : base(accountNumber, client, balance, bonus, isClosed)
+        {
+            Type = AccountType.Platinum;
+            DepositValue = platinumAccountDepositValue;
+            BalanceValue = platinumAccountBalanceValue;
+        }
+
         #endregion
 
-        #region Protected Members
+        /// <summary>
+        /// Gets or sets the account balance.
+        /// </summary>
+        public override decimal Balance { get; protected set; }
 
         /// <inheritdoc />
         /// <summary>
@@ -102,19 +95,5 @@ namespace BLL.Interface.Entities
                 Bonus = 0;
             }
         }
-
-        /// <inheritdoc />
-        /// <summary>
-        /// Withdraws the money. Allows to have a negative balance 
-        /// </summary>
-        /// <param name="amount">The amount.</param>
-        protected override void WithdrawMoney(decimal amount)
-        {
-            Balance -= amount;
-
-            CalculateWithdrawBonus(amount);
-        }
-
-        #endregion
     }
 }

@@ -57,66 +57,38 @@ namespace BLL.Factories
             }
         }
 
-        public Account Create(AccountDto dto)
+        public virtual Account Create(AccountDto dto)
         {
             switch (dto.AccountType)
             {
                 case "Basic":
-                    return new BasicAccount
-                    {
-                        AccountNumber = dto.AccountNumber,
-                        Client = new Client(
-                                       dto.FirstName,
-                                       dto.LastName,
-                                       dto.PassportNumber,
-                                       dto.Email),
-                        Balance = dto.Balance,
-                        Bonus = dto.Bonus,
-                        Type = AccountType.Basic,
-                        IsClosed = dto.IsClosed
-                    };
+                    return new BasicAccount(
+                        dto.AccountNumber,
+                        new Client(dto.FirstName, dto.LastName, dto.PassportNumber, dto.Email),
+                        dto.Balance,
+                        dto.Bonus,
+                        dto.IsClosed);
                 case "Silver":
-                    return new SilverAccount
-                    {
-                        AccountNumber = dto.AccountNumber,
-                        Client = new Client(
-                                       dto.FirstName,
-                                       dto.LastName,
-                                       dto.PassportNumber,
-                                       dto.Email),
-                        Balance = dto.Balance,
-                        Bonus = dto.Bonus,
-                        Type = AccountType.Silver,
-                        IsClosed = dto.IsClosed
-                    };
+                    return new SilverAccount(
+                        dto.AccountNumber,
+                        new Client(dto.FirstName, dto.LastName, dto.PassportNumber, dto.Email),
+                        dto.Balance,
+                        dto.Bonus,
+                        dto.IsClosed);
                 case "Gold":
-                    return new GoldAccount
-                    {
-                        AccountNumber = dto.AccountNumber,
-                        Client = new Client(
-                                       dto.FirstName,
-                                       dto.LastName,
-                                       dto.PassportNumber,
-                                       dto.Email),
-                        Balance = dto.Balance,
-                        Bonus = dto.Bonus,
-                        Type = AccountType.Gold,
-                        IsClosed = dto.IsClosed
-                    };
+                    return new GoldAccount(
+                        dto.AccountNumber,
+                        new Client(dto.FirstName, dto.LastName, dto.PassportNumber, dto.Email),
+                        dto.Balance,
+                        dto.Bonus,
+                        dto.IsClosed);
                 case "Platinum":
-                    return new PlatinumAccount
-                    {
-                        AccountNumber = dto.AccountNumber,
-                        Client = new Client(
-                                       dto.FirstName,
-                                       dto.LastName,
-                                       dto.PassportNumber,
-                                       dto.Email),
-                        Balance = dto.Balance,
-                        Bonus = dto.Bonus,
-                        Type = AccountType.Platinum,
-                        IsClosed = dto.IsClosed
-                    };
+                    return new PlatinumAccount(
+                        dto.AccountNumber,
+                        new Client(dto.FirstName, dto.LastName, dto.PassportNumber, dto.Email),
+                        dto.Balance,
+                        dto.Bonus,
+                        dto.IsClosed);
                 default: throw new InvalidOperationException($"The following account type {dto.AccountType} doesn't exist");
             }
         }
