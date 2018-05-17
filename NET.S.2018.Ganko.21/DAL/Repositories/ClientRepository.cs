@@ -6,6 +6,7 @@ using DAL.Interface.Interfaces;
 using System.Data.Entity;
 using ORM;
 using DAL.Mappers;
+using System.Linq.Expressions;
 
 namespace DAL.Repositories
 {
@@ -21,7 +22,7 @@ namespace DAL.Repositories
         public void Create(ClientDto clientDto)
         {
             CheckInput(clientDto);
-            
+
             this.context.Set<Client>().Add(clientDto.ToClientOrm());
         }
 
@@ -41,7 +42,7 @@ namespace DAL.Repositories
 
         public void Delete(ClientDto clientDto)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         public IEnumerable<ClientDto> GetAll()
@@ -49,19 +50,14 @@ namespace DAL.Repositories
             return this.context.Set<Client>().ToList().Select(client => client.ToClientDto());
         }
 
-        public ClientDto Get(ClientDto clientDto)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ClientDto Get(string number)
-        {
-            throw new NotImplementedException();
-        }
-
         public ClientDto Get(int id)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
+        }
+
+        public ClientDto Get(Expression<Func<ClientDto, bool>> predicate)
+        {
+            throw new NotSupportedException();
         }
 
         private void CheckInput(ClientDto clientDto)

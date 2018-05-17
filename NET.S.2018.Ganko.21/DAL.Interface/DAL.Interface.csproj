@@ -42,9 +42,9 @@
   <ItemGroup>
     <Compile Include="DTO\AccountDto.cs" />
     <Compile Include="DTO\ClientDto.cs" />
-    <Compile Include="DTO\IEntity.cs" />
     <Compile Include="Interfaces\IAccountRepository.cs" />
     <Compile Include="Interfaces\IClientRepository.cs" />
+    <Compile Include="Interfaces\IFakeRepository.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Interfaces\IUnitOfWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

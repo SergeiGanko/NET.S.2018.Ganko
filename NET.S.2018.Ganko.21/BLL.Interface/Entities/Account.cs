@@ -43,6 +43,11 @@ namespace BLL.Interface.Entities
         #region Properties
 
         /// <summary>
+        /// Gets or sets the identifier.
+        /// </summary>
+        public int Id { get; protected set; }
+
+        /// <summary>
         /// Gets the account number.
         /// </summary>
         public string AccountNumber { get; protected set; }
@@ -257,14 +262,7 @@ namespace BLL.Interface.Entities
         /// </returns>
         public override int GetHashCode()
         {
-            unchecked
-            {
-                var hashCode = this.AccountNumber.GetHashCode();
-                hashCode = (hashCode * 73) ^ this.Client.FirstName.GetHashCode();
-                hashCode = (hashCode * 73) ^ this.Client.LastName.GetHashCode();
-                hashCode = (hashCode * 73) ^ this.Client.PassportNumber.GetHashCode();
-                return hashCode;
-            }
+            return this.AccountNumber.GetHashCode() ^ this.Type.GetHashCode();
         }
 
         #endregion

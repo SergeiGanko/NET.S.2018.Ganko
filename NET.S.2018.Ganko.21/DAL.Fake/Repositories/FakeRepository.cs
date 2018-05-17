@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using DAL.Interface.DTO;
 using DAL.Interface.Interfaces;
+using System.Linq.Expressions;
 
 namespace DAL.Fake.Repositories
 {
-    public class FakeRepository : IRepository<AccountDto>
+    public class FakeRepository : IFakeRepository
     {
         private readonly List<AccountDto> accounts;
 
@@ -20,7 +21,7 @@ namespace DAL.Fake.Repositories
             {
                 throw new InvalidOperationException(
                     $"The account: №{account.AccountNumber}, " + 
-                    $"{account.FirstName} {account.LastName} is already exists");
+                    $"{account.Client.FirstName} {account.Client.LastName} is already exists");
             }
 
             accounts.Add(account);
@@ -67,6 +68,11 @@ namespace DAL.Fake.Repositories
         public AccountDto Get(int id)
         {
             throw new NotSupportedException();
+        }
+
+        public AccountDto Get(Expression<Func<AccountDto, bool>> predicate)
+        {
+            throw new NotImplementedException();
         }
 
         public AccountDto Get(AccountDto entity)

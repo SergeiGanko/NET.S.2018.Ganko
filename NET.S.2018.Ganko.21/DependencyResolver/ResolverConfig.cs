@@ -12,7 +12,7 @@ namespace DependencyResolver
     {
         public static void ConfigurateResolver(this IKernel kernel)
         {
-            kernel.Bind<IRepository<AccountDto>>().To<FakeRepository>();
+            kernel.Bind<IFakeRepository>().To<FakeRepository>();
             kernel.Bind<IAccountCreator>().To<AccountCreator>();
             kernel.Bind<IAccountService>().To<AccountService>();
             

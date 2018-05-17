@@ -4,6 +4,5 @@ namespace DAL.Interface.Interfaces
 {
     public interface IClientRepository : IRepository<ClientDto>
     {
-        
     }
 }

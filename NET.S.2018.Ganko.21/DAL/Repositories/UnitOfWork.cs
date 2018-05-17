@@ -8,12 +8,12 @@ namespace DAL.Repositories
     {
         private bool isDisposed;
 
-        public DbContext Context { get; private set; }
-
         public UnitOfWork(DbContext context)
         {
             Context = context;
         }
+
+        public DbContext Context { get; private set; }
 
         public void Commit()
         {

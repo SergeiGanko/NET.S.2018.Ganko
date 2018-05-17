@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DAL.Interface.DTO;
 using DAL.Interface.Interfaces;
 using System.Data.Entity;
 using ORM;
+using System.Linq.Expressions;
+using DAL.Mappers;
 
 namespace DAL.Repositories
 {
@@ -23,37 +23,53 @@ namespace DAL.Repositories
         {
             CheckInput(accountDto);
 
-            // TODO
+            var clientOrm = this.context.Set<Client>().Include(c => c.Accounts)
+                .FirstOrDefault(c => string.Equals(c.Passport, accountDto.Client.PassportNumber));
+
+            this.context.Set<Account>().Add(accountDto.ToAccountOrm(clientOrm));
         }
 
         public void Update(AccountDto accountDto)
         {
-            throw new NotImplementedException();
+            CheckInput(accountDto);
+
+            var accountOrm = this.context.Set<Account>().FirstOrDefault(a => a.Id == accountDto.Id);
+
+            accountOrm.Balance = accountDto.Balance;
+            accountOrm.Bonus = accountDto.Bonus;
+            this.context.Entry(accountOrm).State = EntityState.Modified;
         }
 
         public void Delete(AccountDto accountDto)
         {
-            throw new NotImplementedException();
+            CheckInput(accountDto);
+
+            var accountOrm = this.context.Set<Account>().FirstOrDefault(a => a.Id == accountDto.Id);
+
+            accountOrm.Balance = accountDto.Balance;
+            accountOrm.Bonus = accountDto.Bonus;
+            accountOrm.Closed = accountDto.IsClosed;
+            this.context.Entry(accountOrm).State = EntityState.Modified;
         }
 
         public IEnumerable<AccountDto> GetAll()
         {
-            throw new NotImplementedException();
-        }
-
-        public AccountDto Get(AccountDto accountDto)
-        {
-            throw new NotImplementedException();
-        }
-
-        public AccountDto Get(string number)
-        {
-            throw new NotImplementedException();
+            return this.context.Set<Account>()
+                .Include(c => c.Client)
+                .Include(a => a.AccountType)
+                .Where(p => p.Closed == false)
+                .Select(a => a.ToAccountDto(a.Client.ToClientDto()))
+                .ToList();
         }
 
         public AccountDto Get(int id)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
+        }
+
+        public AccountDto Get(Expression<Func<AccountDto, bool>> predicate)
+        {
+            throw new NotSupportedException();
         }
 
         private void CheckInput(AccountDto accountDto)

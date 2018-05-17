@@ -9,6 +9,7 @@ namespace DAL.Mappers
         public static Client ToClientOrm(this ClientDto dto) 
             => new Client
                    {
+                       Id = dto.Id,
                        FirstName = dto.FirstName,
                        LastName = dto.LastName,
                        Passport = dto.PassportNumber,
@@ -19,6 +20,7 @@ namespace DAL.Mappers
         { 
             var result = new ClientDto
             {
+                Id = client.Id,
                 FirstName = client.FirstName,
                 LastName = client.LastName,
                 Email = client.Email,
@@ -33,6 +35,7 @@ namespace DAL.Mappers
         public static Account ToAccountOrm(this AccountDto dto, Client client) =>
             new Account
                 {
+                    Id = dto.Id,
                     AccountNumber = dto.AccountNumber,
                     AccountType = new AccountType { Type = dto.AccountType },
                     Balance = dto.Balance,
@@ -44,6 +47,7 @@ namespace DAL.Mappers
         public static AccountDto ToAccountDto(this Account account, ClientDto client) =>
             new AccountDto
                 {
+                    Id = account.Id,
                     AccountNumber = account.AccountNumber,
                     AccountType = account.AccountType.Type,
                     Balance = account.Balance,

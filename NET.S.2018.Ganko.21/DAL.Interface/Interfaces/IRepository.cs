@@ -5,7 +5,7 @@ using DAL.Interface.DTO;
 
 namespace DAL.Interface.Interfaces
 {
-    public interface IRepository<TEntity> where TEntity : IEntity
+    public interface IRepository<TEntity>
     {
         void Create(TEntity entity);
 
@@ -14,10 +14,6 @@ namespace DAL.Interface.Interfaces
         void Delete(TEntity entity);
 
         IEnumerable<TEntity> GetAll();
-
-        TEntity Get(TEntity entity);
-
-        TEntity Get(string number);
 
         TEntity Get(int id);
 

@@ -13,10 +13,10 @@ namespace BLL.Services
     {
         private readonly IAccountCreator creator;
 
-        private readonly IRepository<AccountDto> repository;
+        private readonly IFakeRepository repository;
 
         public AccountService(IAccountCreator creator,
-                              IRepository<AccountDto> repository)
+                              IFakeRepository repository)
         {
             this.creator = creator ?? throw new ArgumentNullException($"Argument {nameof(creator)} is null");
             this.repository = repository ?? throw new ArgumentNullException($"Argument {nameof(repository)} is null");
@@ -52,7 +52,7 @@ namespace BLL.Services
                 throw new ArgumentException($"Argument {nameof(accountNumber)} is null, empty or whitespace");
             }
 
-            var account = repository.Get(accountNumber).ToAccount(creator);
+            var account = this.repository.Get(accountNumber).ToAccount(creator);
 
             account.Close();
 
@@ -125,12 +125,12 @@ namespace BLL.Services
                 throw new ArgumentNullException($"Argument {nameof(accountNumber)} is null, empty or whitespace");
             }
 
-            return repository.Get(accountNumber).ToAccount(creator);
+            return this.repository.Get(accountNumber).ToAccount(creator);
         }
 
         public IEnumerable<Account> GetAllAccounts()
         {
-            return repository
+            return this.repository
                 .GetAll()
                 .Select(accountDto => accountDto.ToAccount(creator));
         }

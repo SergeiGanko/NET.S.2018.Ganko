@@ -5,6 +5,10 @@ using DAL.Interface.DTO;
 
 namespace BLL.Factories
 {
+    using System.Data;
+
+    using BLL.Mappers;
+
     public class AccountCreator : IAccountCreator
     {
         /// <summary>
@@ -64,28 +68,28 @@ namespace BLL.Factories
                 case "Basic":
                     return new BasicAccount(
                         dto.AccountNumber,
-                        new Client(dto.FirstName, dto.LastName, dto.PassportNumber, dto.Email),
+                        dto.Client.ToClientBll(),
                         dto.Balance,
                         dto.Bonus,
                         dto.IsClosed);
                 case "Silver":
                     return new SilverAccount(
                         dto.AccountNumber,
-                        new Client(dto.FirstName, dto.LastName, dto.PassportNumber, dto.Email),
+                        dto.Client.ToClientBll(),
                         dto.Balance,
                         dto.Bonus,
                         dto.IsClosed);
                 case "Gold":
                     return new GoldAccount(
                         dto.AccountNumber,
-                        new Client(dto.FirstName, dto.LastName, dto.PassportNumber, dto.Email),
+                        dto.Client.ToClientBll(),
                         dto.Balance,
                         dto.Bonus,
                         dto.IsClosed);
                 case "Platinum":
                     return new PlatinumAccount(
                         dto.AccountNumber,
-                        new Client(dto.FirstName, dto.LastName, dto.PassportNumber, dto.Email),
+                        dto.Client.ToClientBll(),
                         dto.Balance,
                         dto.Bonus,
                         dto.IsClosed);
