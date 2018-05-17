@@ -1,15 +1,17 @@
 ﻿using System.Collections.Generic;
 using System;
+using System.Linq.Expressions;
+using DAL.Interface.DTO;
 
 namespace DAL.Interface.Interfaces
 {
-    public interface IRepository<TEntity> where TEntity : class
+    public interface IRepository<TEntity> where TEntity : IEntity
     {
-        void Add(TEntity entity);
+        void Create(TEntity entity);
 
         void Update(TEntity entity);
 
-        void Remove(TEntity entity);
+        void Delete(TEntity entity);
 
         IEnumerable<TEntity> GetAll();
 
@@ -19,6 +21,6 @@ namespace DAL.Interface.Interfaces
 
         TEntity Get(int id);
 
-        IEnumerable<TEntity> Find(Func<TEntity, bool> predicate);
+        TEntity Get(Expression<Func<TEntity, bool>> predicate);
     }
 }

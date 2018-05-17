@@ -35,7 +35,7 @@ namespace BLL.Services
             }
 
             Account newAccount = this.creator.Create(accountType, client, startBalance);
-            this.repository.Add(newAccount.ToAccountDto());
+            this.repository.Create(newAccount.ToAccountDto());
 
             return newAccount;
         }
@@ -56,7 +56,7 @@ namespace BLL.Services
 
             account.Close();
 
-            this.repository.Remove(account.ToAccountDto());
+            this.repository.Delete(account.ToAccountDto());
         }
 
         public void CloseAccount(Account account)
@@ -65,7 +65,7 @@ namespace BLL.Services
 
             account.Close();
 
-            this.repository.Remove(account.ToAccountDto());
+            this.repository.Delete(account.ToAccountDto());
         }
 
         public void DepositAccount(string accountNumber, decimal amount)

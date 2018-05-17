@@ -4,7 +4,7 @@ using BLL.Interface.Interfaces;
 
 namespace BLL.Mappers
 {
-    public static class BankAccountMapper
+    public static class BllEntityMapper
     {
         public static AccountDto ToAccountDto(this Account account) =>
             new AccountDto

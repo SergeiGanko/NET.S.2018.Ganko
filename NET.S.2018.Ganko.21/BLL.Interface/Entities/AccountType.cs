@@ -5,7 +5,7 @@
     /// </summary>
     public enum AccountType
     {
-        Basic,
+        Basic = 1,
         Silver,
         Gold,
         Platinum

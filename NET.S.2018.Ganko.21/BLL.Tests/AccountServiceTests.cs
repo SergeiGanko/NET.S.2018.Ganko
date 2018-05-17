@@ -37,7 +37,7 @@ namespace BLL.Tests
             Assert.DoesNotThrow((() => service.OpenAccount(AccountType.Gold, testClient.Object)));
             Assert.DoesNotThrow((() => service.OpenAccount(AccountType.Gold, testClient.Object, 1000)));
 
-            mockRepo.Verify(r => r.Add(It.Is<AccountDto>(ac => 
+            mockRepo.Verify(r => r.Create(It.Is<AccountDto>(ac => 
                 ac.IsClosed == false 
                 && ac.AccountType == "Gold"
                 && !string.IsNullOrWhiteSpace(ac.AccountNumber)

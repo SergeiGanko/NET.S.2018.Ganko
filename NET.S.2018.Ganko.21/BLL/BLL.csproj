@@ -40,7 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Mappers\BankAccountMapper.cs" />
+    <Compile Include="Mappers\BllEntityMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Factories\AccountCreator.cs" />
     <Compile Include="Services\AccountNumberCreateSevice.cs" />

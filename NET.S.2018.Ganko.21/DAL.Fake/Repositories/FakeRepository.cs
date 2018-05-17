@@ -14,7 +14,7 @@ namespace DAL.Fake.Repositories
             accounts = new List<AccountDto>();
         }
 
-        public void Add(AccountDto account)
+        public void Create(AccountDto account)
         {
             if (accounts.Contains(account))
             {
@@ -44,7 +44,7 @@ namespace DAL.Fake.Repositories
             this.accounts.Insert(index, account);
         }
 
-        public void Remove(AccountDto account)
+        public void Delete(AccountDto account)
         {
             Update(account);
         }
@@ -77,11 +77,6 @@ namespace DAL.Fake.Repositories
             }
 
             return this.accounts.Find(a => a.AccountNumber == entity.AccountNumber);
-        }
-
-        public IEnumerable<AccountDto> Find(Func<AccountDto, bool> predicate)
-        {
-            throw new NotSupportedException();
         }
     }
 }
