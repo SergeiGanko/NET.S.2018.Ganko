@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5BA0137D-E993-4640-972F-4024A0C57413}</ProjectGuid>
+    <ProjectGuid>{01A36F64-D704-47F0-BFEF-1467199FBDD0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Task4.Tests</RootNamespace>
-    <AssemblyName>Task4.Tests</AssemblyName>
+    <RootNamespace>Matrixes</RootNamespace>
+    <AssemblyName>Matrixes</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,9 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="nunit.framework, Version=3.5.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.3.5.0\lib\net45\nunit.framework.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,24 +40,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TestCalculator.cs" />
+    <Compile Include="DiagonalMatrix.cs" />
+    <Compile Include="MatrixVisitor.cs" />
+    <Compile Include="Matrix.cs" />
+    <Compile Include="MatrixEventArgs.cs" />
+    <Compile Include="MatrixExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Task4.Solution\Task4.Solution.csproj">
-      <Project>{595B3681-B25B-405F-B968-D4438CDBCD72}</Project>
-      <Name>Task4.Solution</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Task4\Task4.csproj">
-      <Project>{a67bc601-7d9f-43fe-8307-5b0472ea2085}</Project>
-      <Name>Task4</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    <Compile Include="SquareMatrix.cs" />
+    <Compile Include="ComputeSumVisitor.cs" />
+    <Compile Include="SymentricMatrix.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
